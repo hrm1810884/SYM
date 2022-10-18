@@ -12,7 +12,7 @@
 - アラームを止めるための設定（話者認識）
 
 ### アラーム設定の文法
-- ALARM HOUR (MINUTE) PARTICLE SET
+- NS_B ALARM HOUR (MINUTE) PARTICLE SET NS_E
 - ALARM: アラーム、目覚まし
 - HOUR: 〇〇時 (5-10)
 - MINUTE: 30分、半
