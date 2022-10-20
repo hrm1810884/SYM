@@ -1,4 +1,5 @@
 import requests
+import sys
 from datetime import datetime
 
 
@@ -35,17 +36,17 @@ def get_time():
 def judge_pop(latest_precipitation):
     pop_string = ''
     if (latest_precipitation == 0.0):
-        pop_string = '現在雨は降っていません\n'
+        pop_string = '現在雨は降っていません'
     elif (latest_precipitation < 0.5):
-        pop_string = '現在雨がパラついています\n'
+        pop_string = '現在雨がパラついています'
     elif (latest_precipitation < 1.0):
-        pop_string = '現在小雨が降っています\n'
+        pop_string = '現在小雨が降っています'
     elif (latest_precipitation < 4.0):
-        pop_string = '現在雨が降っています\n'
+        pop_string = '現在雨が降っています'
     elif (latest_precipitation < 7.5):
-        pop_string = '現在雨が強く降っています\n'
+        pop_string = '現在雨が強く降っています'
     else:
-        pop_string = '現在とんでもない雨です\n'
+        pop_string = '現在とんでもない雨です'
     return pop_string
 
 
@@ -61,7 +62,6 @@ def main():
     amd_json = requests.get(amd_url).json()
 
     # 取得したいデータを選択
-    jma_date = jma_json[0]['timeSeries'][0]['timeDefines'][0]
     jma_weather = jma_json[0]['timeSeries'][0]['areas'][0]['weathers'][0]
     jma_pops = jma_json[0]['timeSeries'][1]['areas'][0]['pops']
     jma_temp_min = jma_json[1]['tempAverage']['areas'][0]['min']
@@ -75,12 +75,15 @@ def main():
     # 最新の降水量データを取得, 品質情報を確認
     latest_precipitation10m = amd_json[latest_key]['precipitation10m'][0]
 
-    print('本日の天気は' + jma_weather + '\n')
-    print('現在の気温は' + str(latest_temp[0]) + '℃\n')
-    print('最低気温は' + str(jma_temp_min) + '℃，' +
-          '最高気温は' + str(jma_temp_max) + '℃です\n')
-    print(judge_pop(latest_precipitation10m))
-    print('今後の降水確率は6時間ごとに，' + '%，'.join(map(str, jma_pops)) + '%です\n')
+    output = []
+    output.append('本日の天気は' + jma_weather)
+    output.append('現在の気温は' + str(latest_temp[0]))
+    output.append('最低気温は' + str(jma_temp_min) + '℃，' +
+                  '最高気温は' + str(jma_temp_max) + '℃です')
+    output.append(judge_pop(latest_precipitation10m))
+    output.append('今後の降水確率は6時間ごとに，' + '%，'.join(map(str, jma_pops)) + '%です')
+
+    sys.stdout.write(';'.join(output))
 
 
 if __name__ == '__main__':
