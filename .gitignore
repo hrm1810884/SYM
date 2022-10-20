@@ -239,5 +239,6 @@ zsdoc/data
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,linux,zsh,python
 
-#yomiファイル
+#alarmset
 alarmset.yomi
+.asr-recog.sh.swp
