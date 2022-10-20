@@ -81,7 +81,7 @@ def main():
 
     output = []
     output.append('本日の天気は' + jma_weather)
-    output.append('現在の気温は' + str(latest_temp[0]))
+    output.append('現在の気温は' + str(latest_temp[0]) + '℃')
     output.append('最低気温は' + str(jma_temp_min) + '℃，' +
                   '最高気温は' + str(jma_temp_max) + '℃です')
     output.append(judge_pop(latest_precipitation10m))
