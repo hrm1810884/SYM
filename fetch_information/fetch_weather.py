@@ -1,20 +1,24 @@
 import requests
 import sys
+import os
 from datetime import datetime
 
 
+DIR_DATA = './data'
+
+
 def get_place():  # 初期設定ファイルからアメダス地点の番号を返す
-    with open('init.dat') as init_file:
+    with open(os.path.join(DIR_DATA, 'init.dat')) as init_file:
         init_prefecture, init_city = init_file.read().split('\n')
 
     prefecture_dict = {}
-    with open('jma_prefecture.dat') as prefecture_file:
+    with open(os.path.join(DIR_DATA, 'jma_prefecture.dat')) as prefecture_file:
         for prefecture_line in prefecture_file:
             prefecture, num = prefecture_line.split()
             prefecture_dict[prefecture] = num
 
     city_dict = {}
-    with open('amd_city_tokyo.dat') as city_file:
+    with open(os.path.join(DIR_DATA, 'amd_city_tokyo.dat')) as city_file:
         for city_line in city_file:
             city, num = city_line.split()
             city_dict[city] = num
@@ -81,7 +85,7 @@ def main():
     output.append('最低気温は' + str(jma_temp_min) + '℃，' +
                   '最高気温は' + str(jma_temp_max) + '℃です')
     output.append(judge_pop(latest_precipitation10m))
-    output.append('今後の降水確率は6時間ごとに，' + '%，'.join(map(str, jma_pops)) + '%です')
+    output.append('今後の降水確率は６時間ごとに，' + '%，'.join(map(str, jma_pops)) + '%です')
 
     sys.stdout.write(';'.join(output))
 
