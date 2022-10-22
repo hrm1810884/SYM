@@ -11,10 +11,33 @@ from googleapiclient.discovery import build
 SCOPES = ["https://www.googleapis.com/auth/calendar"]
 
 
+def get_creds():
+    # Google にcalendarへのアクセストークンを要求してcredsに格納します。
+    creds = None
+
+    # 有効なトークンをすでに持っているかチェック（２回目以降の実行時に認証を省略するため）
+    if os.path.exists("token.pickle"):
+        with open("token.pickle", "rb") as token:
+            creds = pickle.load(token)
+
+    # 期限切れのトークンを持っているかチェック（認証を省略するため）
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refrestoken:
+            creds.refresh(Request())
+        # アクセストークンを要求
+        else:
+            flow = InstalledAppFlow.from_client_secrets_file("credentials.json", SCOPES)
+            creds = flow.run_local_server(port=0)
+        # アクセストークン保存（２回目以降の実行時に認証を省略するため）
+        with open("token.pickle", "wb") as token:
+            pickle.dump(creds, token)
+    return creds
+
+
 def print_txt(events):
     output = []
     if not events:
-        output = "今日は特別な日程はありません"
+        output.append("今日は特別な日程はありません")
     # 予定があった場合には、出力
     else:
         for event in events:
@@ -23,10 +46,14 @@ def print_txt(events):
             else:
                 start = event["start"].get("dateTime")
                 end = event["end"].get("dateTime")
-                start_time = start.split("T")[1]
+                start_ymd, start_time = start.split("T")
+                start_d = start_ymd.split("-")[2]
                 start_hour, start_minute, start_else = start_time.split(":", 2)
-                end_time = end.split("T")[1]
+                end_ymd, end_time = end.split("T")
+                end_d = end_ymd.split("-")[2]
                 end_hour, end_minute, end_else = end_time.split(":", 2)
+                if end_d > start_d:
+                    end_hour = str(int(end_hour) + 24)
                 output.append(
                     start_hour
                     + "時"
@@ -43,27 +70,7 @@ def print_txt(events):
 
 
 def main():
-    # Google にcalendarへのアクセストークンを要求してcredsに格納します。
-    creds = None
-
-    # 有効なトークンをすでに持っているかチェック（２回目以降の実行時に認証を省略するため）
-    if os.path.exists("token.pickle"):
-        with open("token.pickle", "rb") as token:
-            creds = pickle.load(token)
-
-    # 期限切れのトークンを持っているかチェック（認証を省略するため）
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refrestoken:
-            creds.refresh(Request())
-        # アクセストークンを要求
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file(
-                "credentials_hh.json", SCOPES
-            )
-            creds = flow.run_local_server(port=0)
-        # アクセストークン保存（２回目以降の実行時に認証を省略するため）
-        with open("token.pickle", "wb") as token:
-            pickle.dump(creds, token)
+    creds = get_creds()
 
     # カレンダーAPI操作に必要なインスタンス作成
     service = build("calendar", "v3", credentials=creds)
