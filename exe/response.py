@@ -20,9 +20,9 @@ from alarm import alarm_old
 
 jtalkbin = "open_jtalk "
 options = (
-    "-m"
+    "-m "
     + "/usr/share/hts-voice/nitech-jp-atr503-m001/nitech_jp_atr503_m001.htsvoice"
-    + "-ow /tmp/dialogue/out.wav -x /var/lib/mecab/dic/open-jtalk/naist-jdic"
+    + " -ow /tmp/dialogue/out.wav -x /var/lib/mecab/dic/open-jtalk/naist-jdic"
 )
 
 
@@ -82,5 +82,5 @@ if __name__ == "__main__":
             answer += "アラームを" + time[0] + "時" + time[1] + "分に設定しました"
             alarm_old.main()
             sys.stdout.write(1)
-        
+
     os.system(mk_jtalk_command(answer))

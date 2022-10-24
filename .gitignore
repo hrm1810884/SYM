@@ -245,3 +245,6 @@ alarmset.yomi
 ### other ###
 *.json
 test*
+token.pickle
+/lib/sid/GMM/input
+/lib/sid/mfcc/input.mfcc
