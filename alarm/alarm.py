@@ -8,7 +8,7 @@ def main():
     input_command = input()
     while True:
         print(input_command)
-        if check_time(input_command):
+        if not command_is_stop(input_command):
             break
         time.sleep(5)
         input_command = input()
@@ -42,25 +42,18 @@ def calc_time_from_command(string):
     return (hour, minute)
 
 
-# 時刻設定だったら1、止めるだったら0
-def check_time(string):
-    if "止" in string:
-        return 0
-    return 1
-
-
 def command_is_stop(string):
     return "止" in string
 
 
 # 音再生処理
 def sound():
-    while 1:
+    while True:
         os.system("play alarm1.mp3")  # パス指定必要な場合はここで
         time.sleep(5)
-        string = input()
-        print(string)
-        if command_is_stop(string):
+        input_command = input()
+        print(input_command)
+        if command_is_stop(input_command):
             print("alarm stopped")
             exit()
 
