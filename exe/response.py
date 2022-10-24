@@ -15,12 +15,14 @@ import sys
 sys.path.append("../")
 from fetch_calendar import fetch_calendar
 from fetch_weather import fetch_weather
+from alarm import alarm_set
+from alarm import alarm
 
 jtalkbin = "open_jtalk "
 options = (
     "-m"
-    + "/usr/share/hts-voice/nitech-jp-atr503-m001/nitech_jp_atr503_m001.htsvoice"
-    + "-ow /tmp/dialogue/out.wav -x /var/lib/mecab/dic/open-jtalk/naist-jdic"
+    + " /usr/share/hts-voice/nitech-jp-atr503-m001/nitech_jp_atr503_m001.htsvoice"
+    + " -ow /tmp/dialogue/out.wav -x /var/lib/mecab/dic/open-jtalk/naist-jdic"
 )
 
 
@@ -60,10 +62,14 @@ if __name__ == "__main__":
     #     answer = 'もう一度お願いします'
     # print("Silly: " + answer)
 
-    answer = ""
+    answer = ''
     if "天気" in question:
         answer += fetch_weather.main()
     if "予定" in question:
         answer += fetch_calendar.main()
-
+    if "時" in question:
+        time = alarm_set.main()
+        answer += "アラームを" + time[0] + "時" + time[1] + "分に設定しました"
+        alarm.main(time)
+        
     os.system(mk_jtalk_command(answer))

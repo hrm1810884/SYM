@@ -5,25 +5,37 @@ from datetime import datetime
 import requests
 
 DIR_DATA = "./data"
+DIR_INIT = "../init"
 
 
 def get_place():  # 初期設定ファイルからアメダス地点の番号を返す
-    with open(os.path.join(DIR_DATA, "init.dat")) as init_file:
-        init_prefecture, init_city = init_file.read().split("\n")
+    if not os.path.exists(os.path.join(DIR_INIT, "init.dat")):
+        print("Error: You need to initialize SYM first", file=sys.stderr)
+        sys.exit()
 
-    prefecture_dict = {}
+    with open(os.path.join(DIR_INIT, "init.dat")) as init_file:
+        for init_line in init_file:
+            key, value = init_line.split()
+            if key == "prefecture":
+                init_prefecture = value
+            if key == "city":
+                init_city = value
+
     with open(os.path.join(DIR_DATA, "jma_prefecture.dat")) as prefecture_file:
         for prefecture_line in prefecture_file:
-            prefecture, num = prefecture_line.split()
-            prefecture_dict[prefecture] = num
+            tmp_prefecture_name, tmp_prefecture_id = prefecture_line.split()
+            if tmp_prefecture_name == init_prefecture:
+                prefecture_id = tmp_prefecture_id
+                break
 
-    city_dict = {}
     with open(os.path.join(DIR_DATA, "amd_city_tokyo.dat")) as city_file:
         for city_line in city_file:
-            city, num = city_line.split()
-            city_dict[city] = num
+            tmp_city_name, tmp_city_id = city_line.split()
+            if tmp_city_name == init_city:
+                city_id = tmp_city_id
+                break
 
-    return [prefecture_dict[init_prefecture], city_dict[init_city]]
+    return [prefecture_id, city_id]
 
 
 def get_time():
@@ -48,13 +60,13 @@ def recommend_clothes(date, tmp_min, tmp_max):
     output = []
     if WS <= int(date) < SW:  # 夏季
         if tmp_max > 26:
-            output.append("本日は非常に暑くなりますので半袖がおすすめです.帽子や日傘,日焼け止めもお忘れなく")
+            output.append("本日は非常に暑くなりますので半袖がおすすめです．帽子や日傘，日焼け止めもお忘れなく")
             if tmp_min <= 18:
-                output.append("ただ,朝晩は少々冷え込みますので薄手の上着をお持ちください")
+                output.append("ただ，朝晩は少々冷え込みますので薄手の上着をお持ちください")
         elif tmp_max > 21:
             output.append("本日は半袖か薄めの長袖がおすすめです")
             if tmp_min <= 16:
-                output.append("ただ,朝晩は少々冷え込みますので薄手の上着をお持ちください")
+                output.append("ただ，朝晩は少々冷え込みますので薄手の上着をお持ちください")
         elif tmp_min > 16:
             output.append("やや肌寒いので重ね着をおすすめします")
         elif tmp_min > 12:
@@ -63,17 +75,17 @@ def recommend_clothes(date, tmp_min, tmp_max):
             output.append("非常に冷え込みますので厚手の上着をお持ちください")
     else:  # 冬季
         if tmp_min <= 6:
-            output.append("凍える寒さです.厚手の上着をお持ちください.防寒対策も必須です")
+            output.append("凍える寒さです．厚手の上着をお持ちください．防寒対策も必須です")
             if tmp_max > 16:
-                output.append("ただ,昼間は気温が上昇しますので上着は脱げるようにしておきましょう")
+                output.append("ただ，昼間は気温が上昇しますので上着は脱げるようにしておきましょう")
         elif tmp_min <= 12:
-            output.append("非常に冷え込みますので,厚手の上着をお持ちください")
+            output.append("非常に冷え込みますので，厚手の上着をお持ちください")
             if tmp_max > 16:
-                output.append("ただ,昼間は気温が上昇しますので上着は脱げるようにしておきましょう")
+                output.append("ただ，昼間は気温が上昇しますので上着は脱げるようにしておきましょう")
         elif tmp_min <= 15:
-            output.append("少々冷え込みますので防寒対策をしてください.")
+            output.append("少々冷え込みますので防寒対策をしてください")
             if tmp_max > 22:
-                output.append("ただ,昼間は気温が上昇しますので重ね着をおすすめします")
+                output.append("ただ，昼間は気温が上昇しますので重ね着をおすすめします")
         elif tmp_min > 20:
             output.append("暖かい日ですので薄手の衣服をお勧めします")
         else:
@@ -83,7 +95,6 @@ def recommend_clothes(date, tmp_min, tmp_max):
 
 
 def judge_pop(latest_precipitation):
-    pop_string = ""
     if latest_precipitation == 0.0:
         pop_string = "現在雨は降っていません"
     elif latest_precipitation < 0.5:
@@ -145,7 +156,7 @@ def main():
 
     output.append(recommend_clothes(date, float(jma_temp_min), float(jma_temp_max)))
 
-    sys.stdout.write(";".join(output))
+    return ",".join(output)
 
 
 if __name__ == "__main__":
