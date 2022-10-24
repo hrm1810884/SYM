@@ -1,0 +1,52 @@
+% NAME
+今日	ky o:
+
+% OBJECT
+天気	t e N k i
+予定    y o t e:
+
+% FILL_E
+は？	w a
+
+% ADBERB
+の	n o
+
+% CONNECT
+と  t o
+
+%ALARM
+アラーム	a r a: m u
+目覚まし	m e z a m a sh i
+	
+%HOUR
+5時	g o j i
+6時	r o k u j i
+7時	sh i ch i j i
+7時	n a n a j i
+8時	h a ch i j i
+9時	k u j i
+10時	j u: j i
+	
+%MINUTE
+30分	s a N j u q p u N
+半	h a N
+	
+%PARTICLE
+に	n i
+	
+%SET
+かけて	k a k e t e
+起こして	o k o sh i t e
+セットして	s e q t o sh i t e
+
+%STOP
+止めて  t o m e t e
+
+
+## 無音用エントリ
+% NS_B			# 文頭無音
+silB		silB
+% NS_E			# 文末無音
+silE		silE
+% NOISE			# 文中ショートポーズ
+sp		sp
