@@ -18,33 +18,19 @@ def fetch_departure_station():
     with open(os.path.join(DIR_INIT, "init.dat")) as init_file:
         for init_line in init_file:
             key, value = init_line.split()
-            if key == "nearest_stations":
+            if key == "nearest_station":
                 return value
 
 
-def generate_route_url(departure_station):
-    destination_information = get_destination()
-    if destination_information is None:
-        return "電車の用事はありません"
+def generate_route_url(departure_station, destination_information):
     destination_station, arrival_hour, arrival_minute = destination_information
     today = datetime.datetime.now()
     route_url = (
-        "https://transit.yahoo.co.jp/search/print?from="
-        + departure_station
-        + "&flatlon=&to="
-        + destination_station
-        + "&fromgid=&togid=&flatlon=&tlatlon=&via=&viacode=&y="
-        + today.year
-        + "&m="
-        + today.month
-        + "&d="
-        + today.day
-        + "&hh="
-        + arrival_hour
-        + "&m1="
-        + arrival_minute[0]
-        + "&m2="
-        + arrival_minute[1]
+        f"https://transit.yahoo.co.jp/search/print?from={departure_station}"
+        + f"&flatlon=&to={destination_station}"
+        + "&fromgid=&togid=&flatlon=&tlatlon=&via=&viacode="
+        + f"&y={today.year}&m={today.month}&d={today.day}"
+        + f"&hh={arrival_hour}&m1={arrival_minute[0]}&m2={arrival_minute[1]}"
         + "&type=4&ticket=ic&expkind=1&userpass=1&"
         + "ws=2&s=1&al=1&shin=1&ex=1&hb=1&lb=1&sr=1"
     )
@@ -53,9 +39,12 @@ def generate_route_url(departure_station):
 
 def main():
     departure_station = fetch_departure_station()
+    destination_information = get_destination()
+    if destination_information is None:
+        return "電車の用事はありません"
 
     # Requestsを利用してWebページを取得する
-    route_url = generate_route_url(departure_station)
+    route_url = generate_route_url(departure_station, destination_information)
     route_response = requests.get(route_url)
 
     # BeautifulSoupを利用してWebページを解析する
