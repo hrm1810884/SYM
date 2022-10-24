@@ -38,7 +38,7 @@ do
 
 	# 音声認識をして結果をファイルに保存
 	# もし前の状態を保存しておきたければ別変数/別ファイルを用意する
-	padsp julius -C asr/grammar.jconf -filelist ${tmpdirname}/list.txt 2> /dev/null | grep "^sentence1: " | sed -e 's/sentence1://' -e 's/silB//' -e 's/silE//' -e 's/ //g' > ${asrresult}
+	padsp julius -C ../grammar/grammar.jconf -filelist ${tmpdirname}/list.txt 2> /dev/null | grep "^sentence1: " | sed -e 's/sentence1://' -e 's/silB//' -e 's/silE//' -e 's/ //g' > ${asrresult}
 	rm ${tmpdirname}/list.txt	
 
 	# 話者認識/音声認識結果を応答を生成する
@@ -48,7 +48,7 @@ do
 	alarm_status=$(python3 response.py dialogue/dialogue${sidnum}.conf $sidnum $asrresult $alarm_status)
 
 	# 事後処理
-	rm $filename $sidfile $asrresult
+	rm $filename $sidfile $asrresult $alarm_status
 done
 # ここは実行されないはず
 rmdir $tmpdirname
