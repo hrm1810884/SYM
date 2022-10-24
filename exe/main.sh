@@ -24,7 +24,7 @@ while true; do
 	# 話者認識
 	sidfile=${tmpdirname}/spkid.txt
 	#cd sid;
-	bash sid/test.sh $filename $sidfile;
+	bash ../lib/sid/test.sh $filename $sidfile;
 	#cd ..
 	
 	# 現在の話者番号を格納

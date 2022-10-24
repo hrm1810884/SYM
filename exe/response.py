@@ -9,9 +9,12 @@
 # を受け取って応答文および音声を生成する
 #
 # 前の応答への依存性を持たせたい場合は引数を追加すれば良い
-import sys, os
-from silly_siri.fetch_weather import fetch_weather
-from silly_siri.fetch_calendar import fetch_calendar
+import sys
+import os
+
+sys.path.append("../")
+from fetch_weather import fetch_weather
+from fetch_calendar import fetch_calendar
 # 音声合成エンジンのpath
 #jtalkbin = '/usr/local/open_jtalk-1.07/bin/open_jtalk '
 #options = ' -m syn/nitech_jp_atr503_m001.htsvoice -ow /tmp/dialogue/out.wav -x /usr/local/open_jtalk-1.07/dic'
