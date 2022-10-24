@@ -87,13 +87,13 @@ def main():
     for fare in fars_tmp:
         fars.append(fare.get_text().strip())
 
-    target = "[発]"
-    idx = lines[0].find(target)
-    departure_line = lines[0][:idx]
-    target = departure_station
-    idx = stations[0].find(target)
-    departure_time = stations[0][:idx]
-    return departure_time + "に" + departure_station + "駅，" + departure_line + "です"
+    line_target = "[発]"
+    line_idx = lines[0].find(line_target)
+    departure_line = lines[0][:line_idx]
+    station_target = departure_station
+    station_idx = stations[0].find(station_target)
+    departure_time = stations[0][:station_idx]
+    return f"{departure_time}に{departure_station}駅，{departure_line}です"
 
 
 if __name__ == "__main__":
