@@ -5,10 +5,10 @@ import sys
 import schedule
 
 
-def main():
-    args = sys.argv
-    hour = args[0]
-    minute = args[1]
+def main(time):
+    time = sys.argv
+    hour = time[0]
+    minute = time[1]
     # test
     # hour = 15
     # minute = 36
