@@ -1,26 +1,12 @@
 import os
 import time
-import sys
 
 import schedule
 
 
 def main():
-    args = sys.argv
-    hour = args[0]
-    minute = args[1]
-    # test
-    # hour = 15
-    # minute = 36
-
-    target = f"{str(hour).zfill(2)}:{str(minute).zfill(2)}"
-    print(target + "にアラームをセットしました")
-    # アラーム時間設定
-    schedule.every().day.at(target).do(sound)
-    # アラーム待ち
-    while True:
-        schedule.run_pending()
-        time.sleep(1)
+    input_command = input()
+    return calc_time_from_command(input_command)
 
 
 # 目覚まし設定時間取得
