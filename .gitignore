@@ -241,3 +241,4 @@ zsdoc/data
 ### other ###
 *.json
 test*
+token.pickle
