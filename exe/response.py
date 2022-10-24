@@ -15,6 +15,7 @@ import sys
 sys.path.append("../")
 from fetch_calendar import fetch_calendar
 from fetch_weather import fetch_weather
+from alarm import alarm_set
 
 jtalkbin = "open_jtalk "
 options = (
@@ -65,5 +66,7 @@ if __name__ == "__main__":
         answer += fetch_weather.main()
     if "予定" in question:
         answer += fetch_calendar.main()
+    if "時" in question:
+        answer += alarm_set.main()
 
     os.system(mk_jtalk_command(answer))
