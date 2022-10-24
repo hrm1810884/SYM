@@ -1,6 +1,7 @@
 #!/bin/bash
 
 FILE_INIT="./init.dat"
+DATA_DIR="./data/"
 
 clear
 echo "┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓"
@@ -47,7 +48,7 @@ do
   while read -r prefecture _
   do
     echo -ne "$prefecture\t"
-  done < "jma_prefecture.dat"
+  done < "./data/jma_prefecture.dat"
   echo ""
   read -r input_prefecture
   if [ "$input_prefecture" == "東京都" ]; then
@@ -60,7 +61,7 @@ echo "Select the nearest city from below:"
 while read -r city _
 do
   echo -ne "$city\t"
-done < "amd_city_tokyo.dat"
+done < "./data/amd_city_tokyo.dat"
 echo ""
 read -r input_city
 echo -e "city\t$input_city" >> "$FILE_INIT"
