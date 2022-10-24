@@ -1,47 +1,61 @@
+import datetime
+import os
 import sys
 
 import requests
 from bs4 import BeautifulSoup
-import datetime
-sys.path.append("../")
+
 from fetch_calendar.fetch_calendar import get_destination
 
-def main():
-    # 出発駅の入力
-    departure_station = "本郷三丁目"
-    # 到着駅の入力
-    if(get_destination() == None):
-        return -1
-    else:
-        destination_station,destination_hour,destination_minute = get_destination()
+DIR_INIT = "../init"
 
-    # 経路の取得先URL
+
+def fetch_departure_station():
+    if not os.path.exists(os.path.join(DIR_INIT, "init.dat")):
+        print("Error: You need to initialize SYM first", file=sys.stderr)
+        sys.exit()
+
+    with open(os.path.join(DIR_INIT, "init.dat")) as init_file:
+        for init_line in init_file:
+            key, value = init_line.split()
+            if key == "nearest_stations":
+                return value
+
+
+def generate_route_url(departure_station):
+    destination_information = get_destination()
+    if destination_information is None:
+        return "電車の用事はありません"
+    destination_station, arrival_hour, arrival_minute = destination_information
     today = datetime.datetime.now()
-    destination_year = str(today.year)
-    destination_month = str(today.month)
-    destination_day = str(today.day)
-
     route_url = (
         "https://transit.yahoo.co.jp/search/print?from="
         + departure_station
         + "&flatlon=&to="
         + destination_station
         + "&fromgid=&togid=&flatlon=&tlatlon=&via=&viacode=&y="
-        + destination_year
+        + today.year
         + "&m="
-        + destination_month
+        + today.month
         + "&d="
-        + destination_day
+        + today.day
         + "&hh="
-        + destination_hour
+        + arrival_hour
         + "&m1="
-        + destination_minute[0]
+        + arrival_minute[0]
         + "&m2="
-        + destination_minute[1]
-        + "&type=4&ticket=ic&expkind=1&userpass=1&ws=2&s=1&al=1&shin=1&ex=1&hb=1&lb=1&sr=1"
+        + arrival_minute[1]
+        + "&type=4&ticket=ic&expkind=1&userpass=1&"
+        + "ws=2&s=1&al=1&shin=1&ex=1&hb=1&lb=1&sr=1"
     )
+    return route_url
+
+
+def main():
+    departure_station = fetch_departure_station()
 
     # Requestsを利用してWebページを取得する
+    route_url = generate_route_url(departure_station)
     route_response = requests.get(route_url)
 
     # BeautifulSoupを利用してWebページを解析する
@@ -50,9 +64,9 @@ def main():
     # 経路のサマリーを取得
     route_summary = route_soup.find("div", class_="routeSummary")
     # 所要時間を取得
-    required_time = route_summary.find("li", class_="time").get_text()
+    # required_time = route_summary.find("li", class_="time").get_text()
     # 乗り換え回数を取得
-    transfer_count = route_summary.find("li", class_="transfer").get_text()
+    # transfer_count = route_summary.find("li", class_="transfer").get_text()
     # 料金を取得
     fare = route_summary.find("li", class_="fare").get_text()
 
