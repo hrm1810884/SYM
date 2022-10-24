@@ -1,10 +1,11 @@
-import pickle
-import os
 import datetime
+import os
+import pickle
 import sys
-from googleapiclient.discovery import build
-from google_auth_oauthlib.flow import InstalledAppFlow
+
 from google.auth.transport.requests import Request
+from google_auth_oauthlib.flow import InstalledAppFlow
+from googleapiclient.discovery import build
 
 # カレンダーAPIで操作できる範囲を設定（今回は読み書き）
 SCOPES = ['https://www.googleapis.com/auth/calendar']
@@ -41,7 +42,7 @@ def print_txt(events):
     # 予定があった場合には、出力
     else:
         for event in events:
-            if (event['start'].get('dateTime') == None):
+            if event['start'].get('dateTime') is None:
                 output.append('終日' + event['summary'] + 'があります')
             else:
                 start = event['start'].get('dateTime')
@@ -52,15 +53,24 @@ def print_txt(events):
                 end_ymd, end_time = end.split('T')
                 end_d = end_ymd.split('-')[2]
                 end_hour, end_minute, end_else = end_time.split(':', 2)
-                if (end_d > start_d):
+                if end_d > start_d:
                     end_hour = str(int(end_hour) + 24)
-                output.append(start_hour + '時' + start_minute + '分から' + end_hour +
-                              '時' + end_minute + '分まで' + event['summary'] + 'があります')
+                output.append(
+                    start_hour
+                    + '時'
+                    + start_minute
+                    + '分から'
+                    + end_hour
+                    + '時'
+                    + end_minute
+                    + '分まで'
+                    + event['summary']
+                    + 'があります'
+                )
     sys.stdout.write(';'.join(output))
 
 
 def main():
-    # アクセス許可の取得と確認
     creds = get_creds()
 
     # カレンダーAPI操作に必要なインスタンス作成
@@ -68,12 +78,25 @@ def main():
 
     # 現在時刻を取得
     now = datetime.datetime.utcnow().isoformat() + 'Z'  # 'Z' indicates UTC time
-    tomorrow = datetime.datetime.today().replace(hour=23, minute=59, second=59,
-                                                 microsecond=999999).isoformat() + 'Z'
+    tomorrow = (
+        datetime.datetime.today()
+        .replace(hour=23, minute=59, second=59, microsecond=999999)
+        .isoformat()
+        + 'Z'
+    )
     # カレンダーから予定を取得
-    events_result = service.events().list(calendarId='primary', timeMin=now, timeMax=tomorrow,
-                                          maxResults=10, singleEvents=True,
-                                          orderBy='startTime').execute()
+    events_result = (
+        service.events()
+        .list(
+            calendarId='primary',
+            timeMin=now,
+            timeMax=tomorrow,
+            maxResults=10,
+            singleEvents=True,
+            orderBy='startTime',
+        )
+        .execute()
+    )
     events = events_result.get('items', [])
 
     print_txt(events)
