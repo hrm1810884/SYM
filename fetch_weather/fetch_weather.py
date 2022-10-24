@@ -120,6 +120,7 @@ def main():
     jma_json = requests.get(jma_url).json()
     amd_json = requests.get(amd_url).json()
 
+
     # 取得したいデータを選択
     jma_weather = jma_json[0]["timeSeries"][0]["areas"][0]["weathers"][0]
     jma_pops = jma_json[0]["timeSeries"][1]["areas"][0]["pops"]
