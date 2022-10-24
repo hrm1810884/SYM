@@ -1,14 +1,18 @@
 import os
 import time
-import sys
-
 import schedule
 
 
 def main():
-    args = sys.argv
-    hour = args[0]
-    minute = args[1]
+    input_command = input()
+    while True:
+        print(input_command)
+        if check_time(input_command):
+            break
+        time.sleep(5)
+        input_command = input()
+
+    (hour, minute) = calc_time_from_command(input_command)
     # test
     # hour = 15
     # minute = 36
