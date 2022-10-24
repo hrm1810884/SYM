@@ -2,21 +2,25 @@ import sys
 
 import requests
 from bs4 import BeautifulSoup
-
+import datetime
+sys.path.append("../")
+from fetch_calendar.fetch_calendar import get_destination
 
 def main():
     # 出発駅の入力
-    departure_station = input("出発駅を入力してください：")
+    departure_station = "本郷三丁目"
     # 到着駅の入力
-    destination_station = input("到着駅を入力してください：")
-
-    destination_year = input("到着year:")
-    destination_month = input("到着month:")
-    destination_day = input("到着day:")
-    destination_hour = input("到着hour:")
-    destination_minute = input("到着minute:")
+    if(get_destination() == None):
+        return -1
+    else:
+        destination_station,destination_hour,destination_minute = get_destination()
 
     # 経路の取得先URL
+    today = datetime.datetime.now()
+    destination_year = str(today.year)
+    destination_month = str(today.month)
+    destination_day = str(today.day)
+
     route_url = (
         "https://transit.yahoo.co.jp/search/print?from="
         + departure_station
@@ -27,7 +31,7 @@ def main():
         + "&m="
         + destination_month
         + "&d="
-        + destination_hour
+        + destination_day
         + "&hh="
         + destination_hour
         + "&m1="
@@ -86,9 +90,7 @@ def main():
     target = departure_station
     idx = stations[0].find(target)
     departure_time = stations[0][:idx]
-    sys.stdout.write(
-        departure_time + "に" + departure_station + "駅，" + departure_line + "です"
-    )
+    return departure_time + "に" + departure_station + "駅，" + departure_line + "です"
 
 
 if __name__ == "__main__":
