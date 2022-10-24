@@ -80,4 +80,7 @@ echo ""
 read -r input_city
 echo -e "city $input_city" >> "$FILE_INIT"
 
-
+echo "Thank you for letting me know about you!"
+echo "Installing some modules...."
+sleep 2
+pip install -r requirements.txt
