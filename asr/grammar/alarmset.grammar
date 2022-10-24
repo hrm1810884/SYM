@@ -7,3 +7,6 @@ S       :NS_B HOUR PARTICLE ALARM SET NS_E
 #7時半に起こして
 S       :NS_B HOUR MINUTE PARTICLE SET NS_E
 S       :NS_B HOUR PARTICLE SET NS_E
+#アラーム止めて
+S       :NS_B ALARM STOP NS_E
+S       :NS_B STOP NS_E
