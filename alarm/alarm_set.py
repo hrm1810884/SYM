@@ -1,11 +1,8 @@
 import os
 import time
 
-import schedule
-
 
 def main(question):
-    #input_command = input()
     input_command = question
     return calc_time_from_command(input_command)
 
@@ -22,13 +19,6 @@ def calc_time_from_command(string):
         if char == "3" or char == "半":
             minute = 30
     return hour, minute
-
-
-# 時刻設定だったら1、止めるだったら0
-def check_time(string):
-    if "止" in string:
-        return 0
-    return 1
 
 
 def command_is_stop(string):
@@ -49,4 +39,3 @@ def sound():
 
 if __name__ == "__main__":
     main()
-    
