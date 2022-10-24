@@ -52,7 +52,7 @@ if __name__ == "__main__":
     question = asrresult.read().rstrip()
     asrresult.close()
     
-    alarm_status = int(argv[4]) 
+    alarm_status = int(sys.argv[4]) 
 
     # 話者ID と認識結果を表示
     print("SPK" + str(sid) + ": " + question)

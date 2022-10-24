@@ -11,7 +11,8 @@ if [ ! -e $tmpdirname ];then
 	mkdir ${tmpdirname}
 fi
 alarm_status=0
-while true; do
+while :
+do
 	# adinrec による録音
 	filename=${tmpdirname}/input.wav
 	padsp adinrec $filename > /dev/null
@@ -24,7 +25,7 @@ while true; do
 	# 話者認識
 	sidfile=${tmpdirname}/spkid.txt
 	#cd sid;
-	bash ../lib/sid/test.sh $filename $sidfile;
+	bash ../lib/sid/identify_speaker.sh $filename $sidfile;
 	#cd ..
 	
 	# 現在の話者番号を格納
@@ -44,7 +45,7 @@ while true; do
 	# 状態/履歴への依存性を持たせたければこのプログラムを適宜修正（引数変更等）
 	# 初期では話者ID を元に異なる応答リストを読み込む仕様
 
-	alarm_status=$(python3 response.py dialogue/dialogue${sidnum}.conf $sidnum $asrresult $alarmstatus)
+	alarm_status=$(python3 response.py dialogue/dialogue${sidnum}.conf $sidnum $asrresult $alarm_status)
 
 	# 事後処理
 	rm $filename $sidfile $asrresult
