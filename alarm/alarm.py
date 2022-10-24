@@ -24,9 +24,15 @@ def Sound():
     while(1):
         print("Sound")
         os.system("play alarm1.mp3")
-        speak = input()
-        print(speak)
-    exit()    
+        time.sleep(5)
+        stop = input()
+        print(stop)
+        for i in range(len(stop)):
+            
+            if (stop[i] == '止'):
+                print("alarm stop")
+                return 0
+           
     
 def main():
     #string = sys.stdin.readline()
@@ -46,7 +52,7 @@ def main():
             minute = 30
     #test
     hour = 14
-    minute = 23
+    minute = 49
     target = f'{str(hour).zfill(2)}:{str(minute).zfill(2)}'
     print(target+'にアラームをセットしました')
     #アラーム時間設定
