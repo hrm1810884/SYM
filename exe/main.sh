@@ -37,7 +37,7 @@ while true; do
 
 	# 音声認識をして結果をファイルに保存
 	# もし前の状態を保存しておきたければ別変数/別ファイルを用意する
-	julius -C asr/grammar.jconf -filelist ${tmpdirname}/list.txt 2> /dev/null | grep "^sentence1: " | sed -e 's/sentence1://' -e 's/silB//' -e 's/silE//' -e 's/ //g' > ${asrresult}
+	padsp julius -C ../grammar/grammar.jconf -filelist ${tmpdirname}/list.txt 2> /dev/null | grep "^sentence1: " | sed -e 's/sentence1://' -e 's/silB//' -e 's/silE//' -e 's/ //g' > ${asrresult}
 	rm ${tmpdirname}/list.txt	
 
 	# 話者認識/音声認識結果を応答を生成する

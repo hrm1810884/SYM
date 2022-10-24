@@ -16,7 +16,7 @@
 
 # monophone HMMを指定する．
 #-h asr/model/binhmm-jnas-mono-mix16
--h model/binhmm-jnas-mono-mix16
+-h ../lib/model/binhmm-jnas-mono-mix16
 
 # triphone HMMを使いたい場合はこちらを使ってください．
 # monophone HMMとtriphone HMM の違いについては，
@@ -57,4 +57,4 @@
 ############################################################
 # 認識する文法の指定．
 # これを書き換えると認識する文法を変更することができます．
--gram grammar/silly
+-gram silly_siri/silly_siri

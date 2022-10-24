@@ -4,21 +4,19 @@ from datetime import datetime
 
 import requests
 
-DIR_DATA = "./data"
-
 
 def get_place():  # 初期設定ファイルからアメダス地点の番号を返す
-    with open(os.path.join(DIR_DATA, "init.dat")) as init_file:
+    with open("../fetch_weather/data/init.dat") as init_file:
         init_prefecture, init_city = init_file.read().split("\n")
 
     prefecture_dict = {}
-    with open(os.path.join(DIR_DATA, "jma_prefecture.dat")) as prefecture_file:
+    with open("../fetch_weather/data/jma_prefecture.dat") as prefecture_file:
         for prefecture_line in prefecture_file:
             prefecture, num = prefecture_line.split()
             prefecture_dict[prefecture] = num
 
     city_dict = {}
-    with open(os.path.join(DIR_DATA, "amd_city_tokyo.dat")) as city_file:
+    with open("../fetch_weather/data/amd_city_tokyo.dat") as city_file:
         for city_line in city_file:
             city, num = city_line.split()
             city_dict[city] = num
@@ -145,7 +143,7 @@ def main():
 
     output.append(recommend_clothes(date, float(jma_temp_min), float(jma_temp_max)))
 
-    sys.stdout.write(";".join(output))
+    return ",".join(output)
 
 
 if __name__ == "__main__":
