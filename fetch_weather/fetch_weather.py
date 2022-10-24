@@ -37,6 +37,51 @@ def get_time():
     return [yyyymmdd, h3]
 
 
+def recommend_clothes(date,tmp_min,tmp_max):
+    yyyy = date[0:4]
+    mm_ws = '04'
+    mm_sw = '10'
+    dd = '00'
+    WS = int(yyyy+mm_ws+dd)
+    SW = int(yyyy+mm_sw+dd)
+    output = []
+    if(WS <= int(date) < SW): #夏季
+        if(tmp_max > 26):
+            output.append('本日は非常に暑くなりますので半袖がおすすめです.帽子や日傘,日焼け止めもお忘れなく')
+            if(tmp_min <= 18):
+                output.append('ただ,朝晩は少々冷え込みますので薄手の上着をお持ちください')
+        elif(tmp_max > 21):
+            output.append('本日は半袖か薄めの長袖がおすすめです')
+            if(tmp_min <= 16):
+                output.append('ただ,朝晩は少々冷え込みますので薄手の上着をお持ちください')
+        elif(tmp_min > 16):
+            output.append('やや肌寒いので重ね着をおすすめします')
+        elif(tmp_min > 12):
+            output.append('かなり冷え込みますので上着をお持ちください')
+        else:
+            output.append('非常に冷え込みますので厚手の上着をお持ちください')
+    else: #冬季
+        if(tmp_min <= 6):
+            output.append('凍える寒さです.厚手の上着をお持ちください.防寒対策も必須です')
+            if(tmp_max > 16):
+                output.append('ただ,昼間は気温が上昇しますので上着は脱げるようにしておきましょう')
+        elif(tmp_min <= 12):
+            output.append('非常に冷え込みますので,厚手の上着をお持ちください')
+            if(tmp_max > 16):
+                output.append('ただ,昼間は気温が上昇しますので上着は脱げるようにしておきましょう')
+        elif(tmp_min <= 15):
+            output.append('少々冷え込みますので防寒対策をしてください.')
+            if(tmp_max > 22):
+                output.append('ただ,昼間は気温が上昇しますので重ね着をおすすめします')
+        elif(tmp_min > 20):
+            output.append('暖かい日ですので薄手の衣服をお勧めします')
+        else:
+            output.append('暑くなりますので半袖や薄手の長袖をおすすめします')
+
+    return ';'.join(output)
+        
+            
+
 def judge_pop(latest_precipitation):
     pop_string = ''
     if (latest_precipitation == 0.0):
@@ -65,6 +110,7 @@ def main():
     jma_json = requests.get(jma_url).json()
     amd_json = requests.get(amd_url).json()
 
+
     # 取得したいデータを選択
     jma_weather = jma_json[0]['timeSeries'][0]['areas'][0]['weathers'][0]
     jma_pops = jma_json[0]['timeSeries'][1]['areas'][0]['pops']
@@ -86,6 +132,8 @@ def main():
                   '最高気温は' + str(jma_temp_max) + '℃です')
     output.append(judge_pop(latest_precipitation10m))
     output.append('今後の降水確率は６時間ごとに，' + '%，'.join(map(str, jma_pops)) + '%です')
+
+    output.append(recommend_clothes(date,float(jma_temp_min),float(jma_temp_max)))
 
     sys.stdout.write(';'.join(output))
 

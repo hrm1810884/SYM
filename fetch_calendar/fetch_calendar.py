@@ -10,27 +10,7 @@ from google.auth.transport.requests import Request
 SCOPES = ['https://www.googleapis.com/auth/calendar']
 
 
-def print_txt(events):
-    output = []
-    if not events:
-        output = ('今日は特別な日程はありません')
-    # 予定があった場合には、出力
-    else:
-        for event in events:
-            if (event['start'].get('dateTime') == None):
-                output.append('終日' + event['summary'] + 'があります')
-            else:
-                start = event['start'].get('dateTime')
-                end = event['end'].get('dateTime')
-                start_time = start.split('T')[1]
-                start_hour, start_minute, start_else = start_time.split(':', 2)
-                end_time = end.split('T')[1]
-                end_hour, end_minute, end_else = end_time.split(':', 2)
-                output.append(start_hour + '時' + start_minute + '分から' + end_hour +
-                    '時' + end_minute + '分まで' + event['summary'] + 'があります')
-    sys.stdout.write(';'.join(output))
-
-def main():
+def get_creds():
     # Google にcalendarへのアクセストークンを要求してcredsに格納します。
     creds = None
 
@@ -46,11 +26,42 @@ def main():
         # アクセストークンを要求
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
-                'credentials_hh.json', SCOPES)
+                'credentials.json', SCOPES)
             creds = flow.run_local_server(port=0)
         # アクセストークン保存（２回目以降の実行時に認証を省略するため）
         with open('token.pickle', 'wb') as token:
             pickle.dump(creds, token)
+    return creds
+
+
+def print_txt(events):
+    output = []
+    if not events:
+        output.append('今日は特別な日程はありません')
+    # 予定があった場合には、出力
+    else:
+        for event in events:
+            if (event['start'].get('dateTime') == None):
+                output.append('終日' + event['summary'] + 'があります')
+            else:
+                start = event['start'].get('dateTime')
+                end = event['end'].get('dateTime')
+                start_ymd, start_time = start.split('T')
+                start_d = start_ymd.split('-')[2]
+                start_hour, start_minute, start_else = start_time.split(':', 2)
+                end_ymd, end_time = end.split('T')
+                end_d = end_ymd.split('-')[2]
+                end_hour, end_minute, end_else = end_time.split(':', 2)
+                if (end_d > start_d):
+                    end_hour = str(int(end_hour) + 24)
+                output.append(start_hour + '時' + start_minute + '分から' + end_hour +
+                              '時' + end_minute + '分まで' + event['summary'] + 'があります')
+    sys.stdout.write(';'.join(output))
+
+
+def main():
+    # アクセス許可の取得と確認
+    creds = get_creds()
 
     # カレンダーAPI操作に必要なインスタンス作成
     service = build('calendar', 'v3', credentials=creds)
