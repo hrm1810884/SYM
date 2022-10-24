@@ -4,19 +4,33 @@ from datetime import datetime
 
 import requests
 
+DIR_DATA = "./data"
+DIR_INIT = "../init"
+
 
 def get_place():  # 初期設定ファイルからアメダス地点の番号を返す
-    with open("../fetch_weather/data/init.dat") as init_file:
-        init_prefecture, init_city = init_file.read().split("\n")
+    if not os.path.exists(os.path.join(DIR_INIT, "init.dat")):
+        print("Error: You need to initialize SYM first", file=sys.stderr)
+        sys.exit()
+
+    with open(os.path.join(DIR_INIT, "init.dat")) as init_file:
+        for line in init_file.readlines():
+            key, value = line.split()
+            if key == "prefecture":
+                init_prefecture = value
+            if key == "city":
+                init_city = value
 
     prefecture_dict = {}
-    with open("../fetch_weather/data/jma_prefecture.dat") as prefecture_file:
+    with open(
+        os.path.join(DIR_DATA, "jma_prefecture.dat")
+    ) as prefecture_file:
         for prefecture_line in prefecture_file:
             prefecture, num = prefecture_line.split()
             prefecture_dict[prefecture] = num
 
     city_dict = {}
-    with open("../fetch_weather/data/amd_city_tokyo.dat") as city_file:
+    with open(os.path.join(DIR_DATA, "amd_city_tokyo.dat")) as city_file:
         for city_line in city_file:
             city, num = city_line.split()
             city_dict[city] = num
