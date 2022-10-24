@@ -14,28 +14,28 @@ def get_place():  # 初期設定ファイルからアメダス地点の番号を
         sys.exit()
 
     with open(os.path.join(DIR_INIT, "init.dat")) as init_file:
-        for line in init_file.readlines():
-            key, value = line.split()
+        for init_line in init_file:
+            key, value = init_line.split()
             if key == "prefecture":
                 init_prefecture = value
             if key == "city":
                 init_city = value
 
-    prefecture_dict = {}
-    with open(
-        os.path.join(DIR_DATA, "jma_prefecture.dat")
-    ) as prefecture_file:
+    with open(os.path.join(DIR_DATA, "jma_prefecture.dat")) as prefecture_file:
         for prefecture_line in prefecture_file:
-            prefecture, num = prefecture_line.split()
-            prefecture_dict[prefecture] = num
+            tmp_prefecture_name, tmp_prefecture_id = prefecture_line.split()
+            if tmp_prefecture_name == init_prefecture:
+                prefecture_id = tmp_prefecture_id
+                break
 
-    city_dict = {}
     with open(os.path.join(DIR_DATA, "amd_city_tokyo.dat")) as city_file:
         for city_line in city_file:
-            city, num = city_line.split()
-            city_dict[city] = num
+            tmp_city_name, tmp_city_id = city_line.split()
+            if tmp_city_name == init_city:
+                city_id = tmp_city_id
+                break
 
-    return [prefecture_dict[init_prefecture], city_dict[init_city]]
+    return [prefecture_id, city_id]
 
 
 def get_time():
@@ -95,7 +95,6 @@ def recommend_clothes(date, tmp_min, tmp_max):
 
 
 def judge_pop(latest_precipitation):
-    pop_string = ""
     if latest_precipitation == 0.0:
         pop_string = "現在雨は降っていません"
     elif latest_precipitation < 0.5:
