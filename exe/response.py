@@ -51,6 +51,8 @@ if __name__ == "__main__":
     asrresult = open(sys.argv[3], "r")
     question = asrresult.read().rstrip()
     asrresult.close()
+    
+    alarm_status = int(sys.argv[4]) 
 
     # 話者ID と認識結果を表示
     print("SPK" + str(sid) + ": " + question)
@@ -62,14 +64,23 @@ if __name__ == "__main__":
     #     answer = 'もう一度お願いします'
     # print("Silly: " + answer)
 
-    answer = ''
-    if "天気" in question:
-        answer += fetch_weather.main()
-    if "予定" in question:
-        answer += fetch_calendar.main()
-    if "時" in question:
-        time = alarm_set.main()
-        answer += "アラームを" + time[0] + "時" + time[1] + "分に設定しました"
-        alarm.main(time)
-        
+    answer = ""
+    if(alarm_status == 0):
+
+        if "天気" in question:
+            answer += fetch_weather.main()
+        if "予定" in question:
+            answer += fetch_calendar.main()
+        """
+        if "時" in question or "止" in question: 
+            if "時" in question:
+                answer = alarm_set.main()
+            question | alarm_main()
+        """
+        if "時" in question:
+            time = alarm_set.main(question)
+            answer += f'アラームを{time[0]}時{time[1]}分に設定しました'
+            #alarm_old.main()
+            #sys.stdout.write()
+
     os.system(mk_jtalk_command(answer))
