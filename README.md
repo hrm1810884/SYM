@@ -17,3 +17,5 @@
 ## 参考にしたもの
 
 剽窃で全単位ふっ飛ばしたくないので意識して書いていってください．`update_references` ブランチからどうぞ
+
+- [Waking up is the hardest thing I do all day: Sleep inertia and sleep drunkenness](https://pubmed.ncbi.nlm.nih.gov/27692973/)
