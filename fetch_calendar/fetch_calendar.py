@@ -1,7 +1,6 @@
 import datetime
 import os
 import pickle
-import sys
 
 from google.auth.transport.requests import Request
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -26,7 +25,8 @@ def get_creds():
             creds.refresh(Request())
         # アクセストークンを要求
         else:
-            flow = InstalledAppFlow.from_client_secrets_file("credentials.json", SCOPES)
+            flow = InstalledAppFlow.from_client_secrets_file(
+                '../fetch_calendar/credentials.json', SCOPES)
             creds = flow.run_local_server(port=0)
         # アクセストークン保存（２回目以降の実行時に認証を省略するため）
         with open("token.pickle", "wb") as token:
@@ -34,7 +34,7 @@ def get_creds():
     return creds
 
 
-def print_txt(events):
+def get_txt(events):
     output = []
     if not events:
         output.append("今日は特別な日程はありません")
@@ -66,7 +66,9 @@ def print_txt(events):
                     + event["summary"]
                     + "があります"
                 )
-    sys.stdout.write(";".join(output))
+
+    result = ', '.join(output)
+    return result
 
 
 def main():
@@ -98,7 +100,7 @@ def main():
     )
     events = events_result.get("items", [])
 
-    print_txt(events)
+    return get_txt(events)
 
 
 if __name__ == "__main__":

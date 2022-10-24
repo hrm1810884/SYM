@@ -18,9 +18,9 @@ from fetch_weather import fetch_weather
 
 jtalkbin = "open_jtalk "
 options = (
-    "-m"
+    "-m "
     + "/usr/share/hts-voice/nitech-jp-atr503-m001/nitech_jp_atr503_m001.htsvoice"
-    + "-ow /tmp/dialogue/out.wav -x /var/lib/mecab/dic/open-jtalk/naist-jdic"
+    + " -ow /tmp/dialogue/out.wav -x /var/lib/mecab/dic/open-jtalk/naist-jdic"
 )
 
 
@@ -60,7 +60,7 @@ if __name__ == "__main__":
     #     answer = 'もう一度お願いします'
     # print("Silly: " + answer)
 
-    answer = ""
+    answer = ''
     if "天気" in question:
         answer += fetch_weather.main()
     if "予定" in question:
