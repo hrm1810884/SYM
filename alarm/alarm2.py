@@ -2,12 +2,12 @@
 import pygame.mixer
 import schedule
 import time
-
+import os
 #アラーム処理
 def Alarm():
     
     Sound()
-    exit()   #これがないと無限ループになるので注意
+    exit()   #これがないと無限ループになる
 
 #音再生処理
 def Sound():
