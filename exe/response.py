@@ -16,7 +16,7 @@ sys.path.append("../")
 from fetch_calendar import fetch_calendar
 from fetch_weather import fetch_weather
 from alarm import alarm_set
-from alarm import alarm_old
+from alarm import alarm
 
 jtalkbin = "open_jtalk "
 options = (
