@@ -10,11 +10,12 @@
 #
 # 前の応答への依存性を持たせたい場合は引数を追加すれば良い
 import os
-import sys
 import subprocess
+import sys
 
 from alarm import alarm_set
 from fetch_calendar import fetch_calendar
+from fetch_time_to_go import fetch_time_to_go
 from fetch_weather import fetch_weather
 
 jtalkbin = "open_jtalk "
@@ -51,12 +52,11 @@ if __name__ == "__main__":
     question = asrresult.read().rstrip()
     asrresult.close()
 
-
     # 話者ID と認識結果を表示
     print(f"SPK{sid}:{question}")
 
     answer = ""
-    
+
     if "天気" in question:
         answer += fetch_weather.main()
     if "予定" in question:
@@ -64,10 +64,12 @@ if __name__ == "__main__":
     if "時" in question:
         alarm_hour, alarm_minute = alarm_set.main(question)
         answer += f'アラームを{alarm_hour}時{alarm_minute}分に設定しました'
-        proc = subprocess.run("./alarm/asr-recog.sh",shell = True)
-
+        proc = subprocess.run("./alarm/asr-recog.sh", shell=True)
     if "止" in question:
         answer += "アラームがセットされていません。"
+    if "出発" in question:
+        answer += fetch_time_to_go.main()
     else:
         answer += "認識できません。もう一度お願いします。"
+
     os.system(mk_jtalk_command(answer))

@@ -5,14 +5,23 @@
 天気	t e N k i
 予定    y o t e:
 
+% VERB
+出発    sy u q p a ts u
+
 % FILL_E
 は？	w a
 
-% ADBERB
-の	n o
+% ADVERB
+の  n o
 
-% CONNECT
+% AT
+に　n i
+
+%CONNECT
 と  t o
+
+% TIME
+何時？　    n a N j i
 
 %ALARM
 アラーム	a r a: m u
@@ -31,9 +40,6 @@
 30分	s a N j u q p u N
 半	h a N
 	
-%PARTICLE
-に	n i
-	
 %SET
 かけて	k a k e t e
 起こして	o k o sh i t e
@@ -41,7 +47,6 @@
 
 %STOP
 止めて  t o m e t e
-
 
 ## 無音用エントリ
 % NS_B			# 文頭無音
