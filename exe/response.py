@@ -10,13 +10,13 @@
 #
 # 前の応答への依存性を持たせたい場合は引数を追加すれば良い
 import os
+import subprocess
 import sys
 
-from alarm import alarm
 from alarm import alarm_set
 from fetch_calendar import fetch_calendar
-from fetch_weather import fetch_weather
 from fetch_time_to_go import fetch_time_to_go
+from fetch_weather import fetch_weather
 
 jtalkbin = "open_jtalk "
 options = (
@@ -34,16 +34,6 @@ def mk_jtalk_command(answer):
 
 
 if __name__ == "__main__":
-    # # 応答を辞書 reply に登録
-    # conf = open(sys.argv[1],'r')
-    # #conf = codecs.open(sys.argv[1],'r','utf8','ignore')
-    # reply = {}
-    # for line in conf:
-    #     line = line.rstrip()
-    #     a = line.split();
-    #     reply[a[0]] = a[1]
-    # conf.close()
-
     # 話者ID
     sid = int(sys.argv[2])
 
@@ -52,21 +42,29 @@ if __name__ == "__main__":
     question = asrresult.read().rstrip()
     asrresult.close()
 
-    alarm_status = int(sys.argv[4])
-
     # 話者ID と認識結果を表示
     print(f"SPK{sid}:{question}")
 
-    answer = ''
+    answer = ""
+
     if "天気" in question:
         answer += fetch_weather.main()
-    if "予定" in question:
+    elif "予定" in question:
         answer += fetch_calendar.main()
+    elif "出発" in question:
+        answer += fetch_time_to_go.main()
+    elif "時" in question:
+        alarm_hour, alarm_minute = alarm_set.main(question)
+        answer += f'アラームを{alarm_hour}時{alarm_minute}分に設定しました'
+        proc = subprocess.run("./alarm/asr-recog.sh", shell=True)
+        path_txt = 'alarm/alarm_set_tmp.txt'
+        with open(path_txt, mode='w') as f:
+            f.write(answer)
+    elif "止" in question:
+        answer += "アラームがセットされていません。"
     if "出発" in question:
         answer += fetch_time_to_go.main()
-    if "時" in question:
-        time = alarm_set.main()
-        answer += "アラームを" + time[0] + "時" + time[1] + "分に設定しました"
-        alarm.main(time)
-        
+    else:
+        answer += "認識できません。もう一度お願いします。"
+
     os.system(mk_jtalk_command(answer))

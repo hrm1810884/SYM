@@ -8,7 +8,6 @@ if [ ! -e $tmpdirname ];then
   mkdir ${tmpdirname}
 fi
 
-alarm_status=0
 while :
 do
   # adinrec による録音
@@ -41,10 +40,10 @@ do
   # 話者認識/音声認識結果を応答を生成する
   # 状態/履歴への依存性を持たせたければこのプログラムを適宜修正（引数変更等）
   # 初期では話者ID を元に異なる応答リストを読み込む仕様
-  alarm_status=$(python3 response.py dialogue/dialogue"${sidnum}".conf "$sidnum" "$asrresult" "$alarm_status")
+  python3 response.py dialogue/dialogue"${sidnum}".conf "$sidnum" "$asrresult" 
   
   # 事後処理
-  rm "$filename" "$sidfile" "$asrresult" "$alarm_status"
+  rm "$filename" "$sidfile" "$asrresult" 
 done
 
 # ここは実行されないはず
