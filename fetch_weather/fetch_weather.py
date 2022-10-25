@@ -4,7 +4,7 @@ from datetime import datetime
 
 import requests
 
-DIR_DATA = "./data"
+DIR_DATA = "../fetch_weather/data"
 DIR_INIT = "../init"
 
 
@@ -110,7 +110,7 @@ def judge_pop(latest_precipitation):
     return pop_string
 
 
-def main():
+def main(detail_required=False):
     prefecture_num, city_num = get_place()
     date, hour = get_time()
     # 気象庁のデータ取得
@@ -147,14 +147,15 @@ def main():
 
     output = []
     output.append("本日の天気は" + jma_weather)
-    output.append("現在の気温は" + str(latest_temp[0]))
-    output.append(
-        "最低気温は" + str(jma_temp_min) + "℃，" + "最高気温は" + str(jma_temp_max) + "℃です"
-    )
-    output.append(judge_pop(latest_precipitation10m))
-    output.append("今後の降水確率は６時間ごとに，" + "%，".join(map(str, jma_pops)) + "%です")
+    output.append("現在の気温は" + str(latest_temp[0]) + "℃です")
+    if detail_required:
+        output.append(
+            "最低気温は" + str(jma_temp_min) + "℃，" + "最高気温は" + str(jma_temp_max) + "℃です"
+        )
+        output.append(judge_pop(latest_precipitation10m))
+        output.append("今後の降水確率は４時間ごとに，" + "%，".join(map(str, jma_pops)) + "%です")
 
-    output.append(recommend_clothes(date, float(jma_temp_min), float(jma_temp_max)))
+        output.append(recommend_clothes(date, float(jma_temp_min), float(jma_temp_max)))
 
     return ",".join(output)
 

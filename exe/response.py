@@ -1,14 +1,6 @@
 #!/usr/bin/env python3
 # coding: utf-8
-#
-# 応答生成モジュール
-# 基本的には
-# - 入力と応答の対応リスト(argv[1])
-# - 話者認識結果ID (argv[2])
-# - 音声認識結果 (argv[3])
-# を受け取って応答文および音声を生成する
-#
-# 前の応答への依存性を持たせたい場合は引数を追加すれば良い
+
 import os
 import subprocess
 import sys
@@ -46,31 +38,30 @@ if __name__ == "__main__":
     print(f"SPK{sid}:{question}")
 
     answer = ""
-    #question = "5時に起こして"
     if "天気" in question:
-        answer += fetch_weather.main()
-        print("SYM:"+answer)
+        open("already_asked.dat", "w")
+        answer = fetch_weather.main(False)
+    elif "詳しく" in question:
+        already_asked = os.path.isfile("already_asked.dat")
+        answer = fetch_weather.main(already_asked)
     elif "予定" in question:
-        answer += fetch_calendar.main()
-        print("SYM:"+answer)
+        answer = fetch_calendar.main()
     elif "出発" in question:
-        answer += fetch_time_to_go.main()
-        print("SYM:"+answer)
+        answer = fetch_time_to_go.main()
     elif "時" in question:
         alarm_hour, alarm_minute = alarm_set.main(question)
-        answer += f'アラームを{alarm_hour}時{alarm_minute}分に設定しました'
-        print("SYM:"+answer)
-        proc = subprocess.run("../alarm/asr-recog.sh", shell=True)
-        path_txt = '../alarm/alarm_set_tmp.txt'
-        with open(path_txt, mode='w') as f:
+        answer = f"アラームを{alarm_hour}時{alarm_minute}分に設定しました"
+        os.system(mk_jtalk_command(answer))
+        print("SYM:" + answer)
+        path_txt = "../alarm/alarm_set_tmp.txt"
+        with open(path_txt, mode="w") as f:
             f.write(answer)
-        proc = subprocess.run("./alarm/asr-recog.sh", shell=True)
+        proc = subprocess.run("../alarm/asr-recog.sh", shell=True)
         answer = "おはようございます"
     elif "止" in question:
-        answer += "アラームがセットされていません。"
-        print("SYM:"+answer)
+        answer = "アラームがセットされていません"
     else:
-        answer += "認識できません。もう一度お願いします。"
-        print("SYM:"+answer)
+        answer = "認識できません．もう一度お願いします"
 
+    print("SYM:" + answer)
     os.system(mk_jtalk_command(answer))
