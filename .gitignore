@@ -63,7 +63,6 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
 lib64/
 parts/
 sdist/
@@ -239,6 +238,14 @@ zsdoc/data
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,linux,zsh,python
 
+# alarmset
+alarmset.yomi
+.asr-recog.sh.swp
+
 ### other ###
 *.json
 test*
+token.pickle
+/lib/sid/GMM/input
+/lib/sid/mfcc/input.mfcc
+init.dat
