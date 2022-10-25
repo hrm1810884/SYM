@@ -12,12 +12,11 @@
 import os
 import sys
 
-sys.path.append("../")
+from alarm import alarm
+from alarm import alarm_set
 from fetch_calendar import fetch_calendar
 from fetch_weather import fetch_weather
 from fetch_time_to_go import fetch_time_to_go
-from alarm import alarm_set
-from alarm import alarm
 
 jtalkbin = "open_jtalk "
 options = (
@@ -53,15 +52,10 @@ if __name__ == "__main__":
     question = asrresult.read().rstrip()
     asrresult.close()
 
-    # 話者ID と認識結果を表示
-    print("SPK" + str(sid) + ": " + question)
+    alarm_status = int(sys.argv[4])
 
-    # # 応答リストから対応する応答を出力
-    # if question in reply:
-    #     answer = str(reply[question])
-    # else:
-    #     answer = 'もう一度お願いします'
-    # print("Silly: " + answer)
+    # 話者ID と認識結果を表示
+    print(f"SPK{sid}:{question}")
 
     answer = ''
     if "天気" in question:
