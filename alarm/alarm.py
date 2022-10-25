@@ -5,18 +5,26 @@ import schedule
 
 
 def main():
+    #仕様変更により、input_commandは止める命令のみのために使われる
     input_command = input()
+    """
     while True:
         print(input_command)
         if not command_is_stop(input_command):
             break
         time.sleep(5)
         input_command = input()
+    """
+    #txtファイルから時刻を入手する
 
-    (hour, minute) = calc_time_from_command(input_command)
+    f = open(".txt", 'r')
+    input_txt = f.read()
+    (hour, minute) = calc_time_from_command(input_text)
+    f.close()
+    
     # test
-    # hour = 15
-    # minute = 36
+    #hour = 14
+    #minute = 23
 
     target = f"{str(hour).zfill(2)}:{str(minute).zfill(2)}"
     print(target + "にアラームをセットしました")
@@ -49,7 +57,7 @@ def command_is_stop(string):
 # 音再生処理
 def sound():
     while True:
-        os.system("play alarm1.mp3")  # パス指定必要な場合はここで
+        os.system("play alarm/alarm1.mp3")  # パス指定必要な場合はここで
         time.sleep(5)
         input_command = input()
         print(input_command)
