@@ -5,21 +5,48 @@
 天気	t e N k i
 予定    y o t e:
 
-% OBJECT
-何時    n a N j i
+% VERB
+出発    sy u q p a ts u
 
 % FILL_E
 は？	w a
-いい？  i:
 
-% PARTICLE
+% ADVERB
 の  n o
+
+% AT
 に　n i
+
+%CONNECT
 と  t o
 
-% VERB
-出発すれば    sy u q p a ts u s u r e b a
-出発？        sy u q p a ts u
+% TIME
+何時？　    n a N j i
+
+%ALARM
+アラーム	a r a: m u
+目覚まし	m e z a m a sh i
+	
+%HOUR
+5時	g o j i
+6時	r o k u j i
+7時	sh i ch i j i
+7時	n a n a j i
+8時	h a ch i j i
+9時	k u j i
+10時	j u: j i
+	
+%MINUTE
+30分	s a N j u q p u N
+半	h a N
+	
+%SET
+かけて	k a k e t e
+起こして	o k o sh i t e
+セットして	s e q t o sh i t e
+
+%STOP
+止めて  t o m e t e
 
 ## 無音用エントリ
 % NS_B			# 文頭無音

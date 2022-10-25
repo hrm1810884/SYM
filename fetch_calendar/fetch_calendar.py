@@ -76,11 +76,11 @@ def get_destination():
     if not events:
         return None
     else:
-        if('location' in events[0]):
+        if 'location' in events[0]:
             start = events[0]["start"].get("dateTime")
             start_ymd, start_time = start.split("T")
             start_hour, start_minute, start_else = start_time.split(":", 2)
-            return [events[0]['location'],start_hour,start_minute]
+            return [events[0]['location'], start_hour, start_minute]
         else:
             return None
 
