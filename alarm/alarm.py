@@ -1,6 +1,6 @@
 import os
 import time
-
+import sys
 import schedule
 
 
@@ -24,7 +24,7 @@ def main():
     os.remove('alarm/alarm_set_tmp.txt')
     # test
     #hour = 15
-    #minute = 25
+    #minute = 38
 
     target = f"{str(hour).zfill(2)}:{str(minute).zfill(2)}"
     print(target + "にアラームをセットしました")
@@ -63,7 +63,7 @@ def sound():
         print(input_command)
         if command_is_stop(input_command):
             print("alarm stopped")
-            exit()
+            sys.exit()
 
 
 if __name__ == "__main__":
