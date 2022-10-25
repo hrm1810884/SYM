@@ -62,7 +62,7 @@ if __name__ == "__main__":
             f.write(answer)
     elif "止" in question:
         answer += "アラームがセットされていません。"
-    if "出発" in question:
+    elif "出発" in question:
         answer += fetch_time_to_go.main()
     else:
         answer += "認識できません。もう一度お願いします。"
