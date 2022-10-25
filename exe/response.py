@@ -65,4 +65,6 @@ if __name__ == "__main__":
         answer += f'アラームを{alarm_hour}時{alarm_minute}分に設定しました'
     if "止" in question:
         answer += "アラームがセットされていません。"
+    else:
+        answer += "認識できません。もう一度お願いします。"
     os.system(mk_jtalk_command(answer))
