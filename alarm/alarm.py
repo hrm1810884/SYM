@@ -1,6 +1,7 @@
 import os
-import time
 import sys
+import time
+
 import schedule
 
 
@@ -8,7 +9,7 @@ def main():
     hour = sys.argv[1]
     minute = sys.argv[2]
 
-    #アラーム時間設定
+    # アラーム時間設定
     get_up_time = f"{str(hour).zfill(2)}:{str(minute).zfill(2)}"
     schedule.every().day.at(get_up_time).do(sound)
     # アラーム待ち
@@ -39,7 +40,7 @@ def sound():
         with open("../alarm/alarm_set.dat", "w") as f:
             alarm_ringed = str(1)
             f.write(alarm_ringed)
-        if (not os.path.isfile("../alarm/alarm_set.dat")):
+        if not os.path.isfile("../alarm/alarm_set.dat"):
             break
 
 

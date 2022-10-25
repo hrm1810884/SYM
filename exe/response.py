@@ -55,13 +55,16 @@ if __name__ == "__main__":
         with open("../alarm/alarm_set.dat", mode="w") as f:
             alarm_ringed = str(0)
             f.write(alarm_ringed)
-        proc = subprocess.Popen("python3 ../alarm/alarm.py {0} {1}".format(alarm_hour,alarm_minute), shell=True)
+        proc = subprocess.Popen(
+            "python3 ../alarm/alarm.py {0} {1}".format(alarm_hour, alarm_minute),
+            shell=True,
+        )
     elif "止" in question:
         if os.path.isfile("../alarm/alarm_set.dat"):
             with open("../alarm/alarm_set.dat") as f:
-                alarm_ringed = bool(int(f.read())) #0or1
+                alarm_ringed = bool(int(f.read()))  # 0 or 1
                 print(alarm_ringed)
-                if(alarm_ringed):
+                if alarm_ringed:
                     answer = "おはようございます"
                 else:
                     answer = "アラームを解除しました"
