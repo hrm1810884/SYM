@@ -65,6 +65,9 @@ if __name__ == "__main__":
         alarm_hour, alarm_minute = alarm_set.main(question)
         answer += f'アラームを{alarm_hour}時{alarm_minute}分に設定しました'
         proc = subprocess.run("./alarm/asr-recog.sh",shell = True)
+        path_txt = 'alarm/alarm_set_tmp.txt'
+        with open (path_txt, mode = 'w') as f:
+            f.write(answer)
 
     if "止" in question:
         answer += "アラームがセットされていません。"
