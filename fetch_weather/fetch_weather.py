@@ -110,7 +110,7 @@ def judge_pop(latest_precipitation):
     return pop_string
 
 
-def main(already_asked):
+def main(detail_required=False):
     prefecture_num, city_num = get_place()
     date, hour = get_time()
     # 気象庁のデータ取得
@@ -148,7 +148,7 @@ def main(already_asked):
     output = []
     output.append("本日の天気は" + jma_weather)
     output.append("現在の気温は" + str(latest_temp[0]) + "℃です")
-    if(already_asked):
+    if detail_required:
         output.append(
             "最低気温は" + str(jma_temp_min) + "℃，" + "最高気温は" + str(jma_temp_max) + "℃です"
         )
