@@ -1,27 +1,28 @@
 0	[今日]	ky o:
 1	[天気]	t e N k i
 1	[予定]	y o t e:
-2	[出発]	sy u q p a ts u
-3	[は？]	w a
-4	[の]	n o
-5	[に　n]	i
-6	[と]	t o
-7	[何時？　]	n a N j i
-8	[アラーム]	a r a: m u
-8	[目覚まし]	m e z a m a sh i
-9	[5時]	g o j i
-9	[6時]	r o k u j i
-9	[7時]	sh i ch i j i
-9	[7時]	n a n a j i
-9	[8時]	h a ch i j i
-9	[9時]	k u j i
-9	[10時]	j u: j i
-10	[30分]	s a N j u q p u N
-10	[半]	h a N
-11	[かけて]	k a k e t e
-11	[起こして]	o k o sh i t e
-11	[セットして]	s e q t o sh i t e
-12	[止めて]	t o m e t e
-13	[silB]	silB
-14	[silE]	silE
-15	[sp]	sp
+2	[出発]	sh u q p a ts u
+3	[詳しく]	k u w a sh i k u
+4	[は？]	w a
+5	[の]	n o
+6	[に]	n i
+7	[と]	t o
+8	[何時？]	n a N j i
+9	[アラーム]	a r a: m u
+9	[目覚まし]	m e z a m a sh i
+10	[5時]	g o j i
+10	[6時]	r o k u j i
+10	[7時]	sh i ch i j i
+10	[7時]	n a n a j i
+10	[8時]	h a ch i j i
+10	[9時]	k u j i
+10	[10時]	j u: j i
+11	[30分]	s a N j u q p u N
+11	[半]	h a N
+12	[かけて]	k a k e t e
+12	[起こして]	o k o sh i t e
+12	[セットして]	s e q t o sh i t e
+13	[止めて]	t o m e t e
+14	[silB]	silB
+15	[silE]	silE
+16	[sp]	sp
