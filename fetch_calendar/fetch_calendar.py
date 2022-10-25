@@ -21,12 +21,12 @@ def get_creds():
 
     # 期限切れのトークンを持っているかチェック（認証を省略するため）
     if not creds or not creds.valid:
-        if creds and creds.expired and creds.refrestoken:
+        if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
         # アクセストークンを要求
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
-                '../fetch_calendar/credentials.json', SCOPES)
+                'fetch_calendar/credentials.json', SCOPES)
             creds = flow.run_local_server(port=0)
         # アクセストークン保存（２回目以降の実行時に認証を省略するため）
         with open("token.pickle", "wb") as token:
