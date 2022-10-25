@@ -46,7 +46,7 @@ if __name__ == "__main__":
     print(f"SPK{sid}:{question}")
 
     answer = ""
-
+    #question = "5時に起こして"
     if "天気" in question:
         answer += fetch_weather.main()
     elif "予定" in question:
@@ -56,10 +56,13 @@ if __name__ == "__main__":
     elif "時" in question:
         alarm_hour, alarm_minute = alarm_set.main(question)
         answer += f'アラームを{alarm_hour}時{alarm_minute}分に設定しました'
-        proc = subprocess.run("./alarm/asr-recog.sh", shell=True)
+        os.system(mk_jtalk_command(answer))
         path_txt = 'alarm/alarm_set_tmp.txt'
         with open(path_txt, mode='w') as f:
             f.write(answer)
+        proc = subprocess.run("./alarm/asr-recog.sh", shell=True)
+        answer = "おはようございます"
+        
     elif "止" in question:
         answer += "アラームがセットされていません。"
     elif "出発" in question:

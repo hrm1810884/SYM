@@ -6,7 +6,7 @@ import schedule
 
 def main():
     #仕様変更により、input_commandは止める命令のみのために使われる
-    input_command = input()
+    
     """
     while True:
         print(input_command)
@@ -17,14 +17,14 @@ def main():
     """
     #txtファイルから時刻を入手する
 
-    f = open(".txt", 'r')
-    input_txt = f.read()
+    f = open("alarm/alarm_set_tmp.txt", 'r')
+    input_text = f.read()
     (hour, minute) = calc_time_from_command(input_text)
     f.close()
-    
+    os.remove('alarm/alarm_set_tmp.txt')
     # test
-    #hour = 14
-    #minute = 23
+    #hour = 15
+    #minute = 25
 
     target = f"{str(hour).zfill(2)}:{str(minute).zfill(2)}"
     print(target + "にアラームをセットしました")
