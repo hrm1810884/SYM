@@ -11,6 +11,7 @@
 # 前の応答への依存性を持たせたい場合は引数を追加すれば良い
 import os
 import sys
+import subprocess
 
 from alarm import alarm_set
 from fetch_calendar import fetch_calendar
@@ -63,6 +64,8 @@ if __name__ == "__main__":
     if "時" in question:
         alarm_hour, alarm_minute = alarm_set.main(question)
         answer += f'アラームを{alarm_hour}時{alarm_minute}分に設定しました'
+        proc = subprocess.run("./alarm/asr-recog.sh",shell = True)
+
     if "止" in question:
         answer += "アラームがセットされていません。"
     else:

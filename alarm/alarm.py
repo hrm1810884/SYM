@@ -4,8 +4,8 @@ import time
 import schedule
 
 
-def main(question):
-    input_command = question
+def main():
+    input_command = input()
     """
     while True:
         print(input_command)
@@ -16,8 +16,8 @@ def main(question):
     """
     (hour, minute) = calc_time_from_command(input_command)
     # test
-    # hour = 15
-    # minute = 36
+    hour = 14
+    minute = 15
 
     target = f"{str(hour).zfill(2)}:{str(minute).zfill(2)}"
     print(target + "にアラームをセットしました")
