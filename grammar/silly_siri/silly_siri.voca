@@ -5,14 +5,21 @@
 天気	t e N k i
 予定    y o t e:
 
+% OBJECT
+何時    n a N j i
+
 % FILL_E
 は？	w a
+いい？  i:
 
-% ADBERB
-の	n o
-
-% CONNECT
+% PARTICLE
+の  n o
+に　n i
 と  t o
+
+% VERB
+出発すれば    sy u q p a ts u s u r e b a
+出発？        sy u q p a ts u
 
 ## 無音用エントリ
 % NS_B			# 文頭無音

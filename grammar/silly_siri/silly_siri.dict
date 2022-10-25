@@ -1,9 +1,14 @@
 0	[今日]	ky o:
 1	[天気]	t e N k i
-1	[予定]	y o t e i
+1	[予定]	y o t e:
+1	[何時]	n a N j i
 2	[は？]	w a
+2	[いい？]	i:
 3	[の]	n o
-4	[と]	t o
+3	[に　n]	i
+3	[と]	t o
+4	[出発すれば]	sy u q p a ts u s u r e b a
+4	[出発？]	sy u q p a ts u
 5	[silB]	silB
 6	[silE]	silE
 7	[sp]	sp
