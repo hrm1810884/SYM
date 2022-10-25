@@ -20,8 +20,8 @@ from fetch_weather import fetch_weather
 
 jtalkbin = "open_jtalk "
 options = (
-    "-m"
-    + " /usr/share/hts-voice/nitech-jp-atr503-m001/nitech_jp_atr503_m001.htsvoice"
+    "-m "
+    + "/usr/share/hts-voice/nitech-jp-atr503-m001/nitech_jp_atr503_m001.htsvoice"
     + " -ow /tmp/dialogue/out.wav -x /var/lib/mecab/dic/open-jtalk/naist-jdic"
 )
 
@@ -49,22 +49,26 @@ if __name__ == "__main__":
 
     if "天気" in question:
         answer += fetch_weather.main()
+        print("SYM:"+answer)
     elif "予定" in question:
         answer += fetch_calendar.main()
+        print("SYM:"+answer)
     elif "出発" in question:
         answer += fetch_time_to_go.main()
+        print("SYM:"+answer)
     elif "時" in question:
         alarm_hour, alarm_minute = alarm_set.main(question)
         answer += f'アラームを{alarm_hour}時{alarm_minute}分に設定しました'
-        proc = subprocess.run("./alarm/asr-recog.sh", shell=True)
-        path_txt = 'alarm/alarm_set_tmp.txt'
+        print("SYM:"+answer)
+        proc = subprocess.run("../alarm/asr-recog.sh", shell=True)
+        path_txt = '../alarm/alarm_set_tmp.txt'
         with open(path_txt, mode='w') as f:
             f.write(answer)
     elif "止" in question:
         answer += "アラームがセットされていません。"
-    if "出発" in question:
-        answer += fetch_time_to_go.main()
+        print("SYM:"+answer)
     else:
         answer += "認識できません。もう一度お願いします。"
+        print("SYM:"+answer)
 
     os.system(mk_jtalk_command(answer))
