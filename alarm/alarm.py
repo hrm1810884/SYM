@@ -9,8 +9,8 @@ def main():
     minute = sys.argv[2]
 
     #アラーム時間設定
-    time = f"{str(hour).zfill(2)}:{str(minute).zfill(2)}"
-    schedule.every().day.at(time).do(sound)
+    get_up_time = f"{str(hour).zfill(2)}:{str(minute).zfill(2)}"
+    schedule.every().day.at(get_up_time).do(sound)
     # アラーム待ち
     while True:
         schedule.run_pending()

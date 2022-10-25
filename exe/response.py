@@ -50,6 +50,8 @@ if __name__ == "__main__":
     elif "時" in question:
         alarm_hour, alarm_minute = alarm.get_time(question)
         answer = f"アラームを{alarm_hour}時{alarm_minute}分に設定しました"
+        if os.path.isfile("already_asked.dat"):
+            os.remove("already_asked.dat")
         with open("../alarm/alarm_set.dat", mode="w") as f:
             alarm_ringed = str(0)
             f.write(alarm_ringed)
