@@ -1,4 +1,4 @@
-import os
+import os,re
 import time
 
 
@@ -9,16 +9,17 @@ def main(question):
 
 # 目覚まし設定時間取得
 def calc_time_from_command(string):
-    minute = 0
-    hour = 0
-    for char in string:
-        if char == "1":
-            hour = 10
-        if char in ["5", "6", "7", "8", "9"]:
-            hour = int(char)
-        if char == "3" or char == "半":
-            minute = 30
-    return hour, minute
+    # minute = 0
+    # hour = 0
+    # for char in string:
+    #     if char == "1":
+    #         hour = 10
+    #     if char in ["5", "6", "7", "8", "9"]:
+    #         hour = int(char)
+    #     if char == "3" or char == "半":
+    #         minute = 30
+    hour,minute,others = re.split('[時分]',string)
+    return int(hour), int(minute)
 
 
 def command_is_stop(string):
