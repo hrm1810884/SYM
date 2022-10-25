@@ -3,15 +3,16 @@ import time
 import schedule
 
 
-def main():
-    input_command = input()
+def main(question):
+    input_command = question
+    """
     while True:
         print(input_command)
         if check_time(input_command):
             break
         time.sleep(5)
         input_command = input()
-
+    """
     (hour, minute) = calc_time_from_command(input_command)
     # test
     # hour = 15

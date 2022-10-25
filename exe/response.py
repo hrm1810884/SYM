@@ -80,7 +80,7 @@ if __name__ == "__main__":
         if "時" in question:
             time = alarm_set.main(question)
             answer += f'アラームを{time[0]}時{time[1]}分に設定しました'
-            #alarm_old.main()
+            alarm.main(question)
             #sys.stdout.write()
 
     os.system(mk_jtalk_command(answer))
