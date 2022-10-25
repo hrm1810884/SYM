@@ -5,6 +5,7 @@ import schedule
 
 
 def main():
+    #仕様変更により、input_commandは止める命令のみのために使われる
     input_command = input()
     """
     while True:
@@ -14,7 +15,13 @@ def main():
         time.sleep(5)
         input_command = input()
     """
-    (hour, minute) = calc_time_from_command(input_command)
+    #txtファイルから時刻を入手する
+
+    f = open(".txt", 'r')
+    input_txt = f.read()
+    (hour, minute) = calc_time_from_command(input_text)
+    f.close()
+    
     # test
     #hour = 14
     #minute = 23

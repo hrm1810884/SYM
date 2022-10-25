@@ -34,16 +34,6 @@ def mk_jtalk_command(answer):
 
 
 if __name__ == "__main__":
-    # # 応答を辞書 reply に登録
-    # conf = open(sys.argv[1],'r')
-    # #conf = codecs.open(sys.argv[1],'r','utf8','ignore')
-    # reply = {}
-    # for line in conf:
-    #     line = line.rstrip()
-    #     a = line.split();
-    #     reply[a[0]] = a[1]
-    # conf.close()
-
     # 話者ID
     sid = int(sys.argv[2])
 
@@ -59,13 +49,18 @@ if __name__ == "__main__":
 
     if "天気" in question:
         answer += fetch_weather.main()
-    if "予定" in question:
+    elif "予定" in question:
         answer += fetch_calendar.main()
-    if "時" in question:
+    elif "出発" in question:
+        answer += fetch_time_to_go.main()
+    elif "時" in question:
         alarm_hour, alarm_minute = alarm_set.main(question)
         answer += f'アラームを{alarm_hour}時{alarm_minute}分に設定しました'
         proc = subprocess.run("./alarm/asr-recog.sh", shell=True)
-    if "止" in question:
+        path_txt = 'alarm/alarm_set_tmp.txt'
+        with open(path_txt, mode='w') as f:
+            f.write(answer)
+    elif "止" in question:
         answer += "アラームがセットされていません。"
     if "出発" in question:
         answer += fetch_time_to_go.main()
