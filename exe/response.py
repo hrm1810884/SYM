@@ -46,7 +46,7 @@ if __name__ == "__main__":
     print(f"SPK{sid}:{question}")
 
     answer = ""
-
+    #question = "5時に起こして"
     if "天気" in question:
         answer += fetch_weather.main()
         print("SYM:"+answer)
@@ -64,6 +64,8 @@ if __name__ == "__main__":
         path_txt = '../alarm/alarm_set_tmp.txt'
         with open(path_txt, mode='w') as f:
             f.write(answer)
+        proc = subprocess.run("./alarm/asr-recog.sh", shell=True)
+        answer = "おはようございます"
     elif "止" in question:
         answer += "アラームがセットされていません。"
         print("SYM:"+answer)
