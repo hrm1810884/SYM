@@ -48,8 +48,15 @@ if __name__ == "__main__":
     answer = ""
     #question = "5時に起こして"
     if "天気" in question:
-        answer += fetch_weather.main()
+        open("already_asked.dat")
+        detail = False
+        answer += fetch_weather.main(detail)
         print("SYM:"+answer)
+    elif "詳しく" in question:
+        if(os.path.isfile("already_asked.dat")):
+            detail = True
+            answer += fetch_weather.main(detail)
+            print("SYM:"+answer)
     elif "予定" in question:
         answer += fetch_calendar.main()
         print("SYM:"+answer)
@@ -58,13 +65,13 @@ if __name__ == "__main__":
         print("SYM:"+answer)
     elif "時" in question:
         alarm_hour, alarm_minute = alarm_set.main(question)
-        answer += f'アラームを{alarm_hour}時{alarm_minute}分に設定しました'
+        answer = f'アラームを{alarm_hour}時{alarm_minute}分に設定しました'
+        os.system(mk_jtalk_command(answer))
         print("SYM:"+answer)
-        proc = subprocess.run("../alarm/asr-recog.sh", shell=True)
         path_txt = '../alarm/alarm_set_tmp.txt'
         with open(path_txt, mode='w') as f:
             f.write(answer)
-        proc = subprocess.run("./alarm/asr-recog.sh", shell=True)
+        proc = subprocess.run("../alarm/asr-recog.sh", shell=True)
         answer = "おはようございます"
     elif "止" in question:
         answer += "アラームがセットされていません。"
