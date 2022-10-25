@@ -16,8 +16,8 @@ def main():
     """
     (hour, minute) = calc_time_from_command(input_command)
     # test
-    hour = 14
-    minute = 15
+    #hour = 14
+    #minute = 23
 
     target = f"{str(hour).zfill(2)}:{str(minute).zfill(2)}"
     print(target + "にアラームをセットしました")
@@ -50,7 +50,7 @@ def command_is_stop(string):
 # 音再生処理
 def sound():
     while True:
-        os.system("play alarm1.mp3")  # パス指定必要な場合はここで
+        os.system("play alarm/alarm1.mp3")  # パス指定必要な場合はここで
         time.sleep(5)
         input_command = input()
         print(input_command)
