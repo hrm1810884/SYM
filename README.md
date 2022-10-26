@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img src="../asset/SYM_logo_text.png" width="300">
+  <img src=./asset/SYM_logo_text.png width="300">
 </h1><br>
 
 ## これはなに
