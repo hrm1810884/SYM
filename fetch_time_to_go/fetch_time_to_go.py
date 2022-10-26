@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 
 from fetch_calendar import fetch_calendar
 
-DIR_INIT = "../init"
+DIR_INIT = "init"
 
 
 def fetch_departure_station() -> str:
@@ -92,7 +92,8 @@ def main():
     station_target = departure_station
     station_idx = stations[0].find(station_target)
     departure_time = stations[0][:station_idx]
-    return f"{departure_time}に{departure_station}駅，{departure_line}です"
+    departure_hour,departure_minute = departure_time.split(":")
+    return f"{departure_hour}時{departure_minute}分に{departure_station}駅，{departure_line}です"
 
 
 if __name__ == "__main__":

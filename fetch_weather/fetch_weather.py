@@ -4,8 +4,8 @@ from datetime import datetime
 
 import requests
 
-DIR_DATA = "../fetch_weather/data"
-DIR_INIT = "../init"
+DIR_DATA = "fetch_weather/data"
+DIR_INIT = "init"
 
 
 def fetch_location_number() -> list:

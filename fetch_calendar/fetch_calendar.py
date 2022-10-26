@@ -32,7 +32,7 @@ def generate_credentials():
         # アクセストークンを要求
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
-                "fetch_calendar/credentials.json", SCOPES
+                "credentials.json", SCOPES
             )
             credentials = flow.run_local_server(port=0)
 
@@ -88,7 +88,7 @@ def generate_events_text(events):
                 + "があります"
             )
 
-    result = ", ".join(result)
+    result = '  '.join(output)
     return result
 
 
