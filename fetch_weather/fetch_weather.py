@@ -110,7 +110,7 @@ def judge_pop(latest_precipitation):
     return pop_string
 
 
-def main(detail_required=False, clothes_asking=False):
+def main(detail_required=False, clothes_required=False):
     prefecture_num, city_num = get_place()
     date, hour, datetime = get_time()
     # 気象庁のデータ取得
@@ -146,7 +146,7 @@ def main(detail_required=False, clothes_asking=False):
     latest_precipitation10m = amd_json[latest_key]["precipitation10m"][0]
 
     output = []
-    if clothes_asking:
+    if clothes_required:
         output.append(recommend_clothes(date, float(jma_temp_min), float(jma_temp_max)))
     else:
         output.append("本日の天気は" + jma_weather)

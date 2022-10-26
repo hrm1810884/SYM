@@ -18,40 +18,49 @@ options = (
 )
 
 
-# 音声合成のコマンドを生成 (open jtalk を 使う場合）
 def mk_jtalk_command(answer):
+    """音声情報のコマンドを生成する
+
+    Parameters
+    ----------
+    answer : str
+        応答する内容
+
+    Returns
+    -------
+    str
+        音声情報のコマンド
+    """
     jtalk = 'echo "' + answer + '" | ' + jtalkbin + options + ";"
     play = "play -q /tmp/dialogue/out.wav; rm /tmp/dialogue/out.wav;"
     return jtalk + play
 
 
-if __name__ == "__main__":
-    # 話者ID
-    sid = int(sys.argv[2])
+def exe(question):
+    """質問内容に応じて応答を返す
 
-    # 認識結果
-    asrresult = open(sys.argv[3], "r")
-    question = asrresult.read().rstrip()
-    asrresult.close()
+    Parameters
+    ----------
+    question : str
+        質問文
 
-    # 話者ID と認識結果を表示
-    print(f"SPK{sid}:{question}")
-
+    Returns
+    -------
+    str
+        SYM の応答
+    """
     if "天気" in question:
         open("already_asked.dat", "w")
-        already_asked = False
-        clothes_asking = False
-        answer = fetch_weather.main(already_asked, clothes_asking)
+        answer = fetch_weather.main(detail_required=False, clothes_required=False)
         answer = answer.replace('℃', '℃ ')
     elif "詳しく" in question:
-        already_asked = os.path.isfile("already_asked.dat")
-        clothes_asking = False
-        answer = fetch_weather.main(already_asked, clothes_asking)
+        answer = fetch_weather.main(
+            detail_required=os.path.isfile("already_asked.dat"),
+            clothes_required=False
+        )
         answer = answer.replace('℃', '℃ ')
     elif "服" in question:
-        already_asked = False
-        clothes_asking = True
-        answer = fetch_weather.main(already_asked, clothes_asking)
+        answer = fetch_weather.main(detail_required=False, clothes_required=True)
     elif "予定" in question:
         answer = fetch_calendar.main()
     elif "出発" in question:
@@ -62,8 +71,7 @@ if __name__ == "__main__":
         if os.path.isfile("already_asked.dat"):
             os.remove("already_asked.dat")
         with open("../alarm/alarm_set.dat", mode="w") as f:
-            alarm_ringed = str(0)
-            f.write(alarm_ringed)
+            f.write("0")  # alarm_ringed として読まれる
         proc = subprocess.Popen(
             "python3 ../alarm/alarm.py {0} {1}".format(alarm_hour, alarm_minute),
             shell=True,
@@ -73,16 +81,32 @@ if __name__ == "__main__":
             with open("../alarm/alarm_set.dat") as f:
                 alarm_ringed = bool(int(f.read()))  # 0 or 1
                 print(alarm_ringed)
-                if alarm_ringed:
-                    answer = "おはようございます"
-                else:
-                    answer = "アラームを解除しました"
+            answer = "おはようございます" if alarm_ringed else "アラームを解除しました"
             os.remove("../alarm/alarm_set.dat")
         else:
             answer = "アラームがセットされていません"
     else:
         answer = "認識できません．もう一度お願いします"
 
+    return answer
+
+
+def main():
+    # 認識情報を取得
+    speaker_id = int(sys.argv[2])
+    asrresult = open(sys.argv[3], "r")
+    question = asrresult.read().rstrip()
+    asrresult.close()
+
+    # 話者ID と認識結果を表示
+    print(f"SPK{speaker_id}:{question}")
+
+    answer = exe(question)
+
     print("SYM:" + answer.replace('  ', '\n    '))
     answer = answer.replace('℃ ', '℃')
     os.system(mk_jtalk_command(answer))
+
+
+if __name__ == "__main__":
+    main()
