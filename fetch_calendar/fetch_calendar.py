@@ -67,7 +67,7 @@ def get_txt(events):
                     + "があります"
                 )
 
-    result = ', '.join(output)
+    result = '  '.join(output)
     return result
 
 
