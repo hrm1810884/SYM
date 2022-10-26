@@ -24,6 +24,14 @@ def mk_jtalk_command(answer):
     play = "play -q /tmp/dialogue/out.wav; rm /tmp/dialogue/out.wav;"
     return jtalk + play
 
+def reform_answer(answer):
+    if '所' in answer:
+        answer.replace('所','ところ')
+    if '℃' in answer:
+        answer.replace('℃ ', '℃')
+    if '時00分' in answer:
+        answer.replace('時00分','時')
+
 
 if __name__ == "__main__":
     # 話者ID
@@ -61,28 +69,28 @@ if __name__ == "__main__":
         answer = f"アラームを{alarm_hour}時{alarm_minute}分に設定しました"
         if os.path.isfile("already_asked.dat"):
             os.remove("already_asked.dat")
-        with open("../alarm/alarm_set.dat", mode="w") as f:
+        with open("alarm_set.dat", mode="w") as f:
             alarm_ringed = str(0)
             f.write(alarm_ringed)
         proc = subprocess.Popen(
-            "python3 ../alarm/alarm.py {0} {1}".format(alarm_hour, alarm_minute),
+            "python3 alarm/alarm.py {0} {1}".format(alarm_hour, alarm_minute),
             shell=True,
         )
     elif "止" in question:
-        if os.path.isfile("../alarm/alarm_set.dat"):
-            with open("../alarm/alarm_set.dat") as f:
+        if os.path.isfile("alarm_set.dat"):
+            with open("alarm_set.dat") as f:
                 alarm_ringed = bool(int(f.read()))  # 0 or 1
                 print(alarm_ringed)
                 if alarm_ringed:
                     answer = "おはようございます"
                 else:
                     answer = "アラームを解除しました"
-            os.remove("../alarm/alarm_set.dat")
+            os.remove("alarm_set.dat")
         else:
             answer = "アラームがセットされていません"
     else:
         answer = "認識できません．もう一度お願いします"
 
     print("SYM:" + answer.replace('  ', '\n    '))
-    answer = answer.replace('℃ ', '℃')
+    reform_answer(answer)
     os.system(mk_jtalk_command(answer))

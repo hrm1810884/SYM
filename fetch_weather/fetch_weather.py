@@ -4,8 +4,8 @@ from datetime import datetime
 
 import requests
 
-DIR_DATA = "../fetch_weather/data"
-DIR_INIT = "../init"
+DIR_DATA = "fetch_weather/data"
+DIR_INIT = "init"
 
 
 def get_place():  # 初期設定ファイルからアメダス地点の番号を返す

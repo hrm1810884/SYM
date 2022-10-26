@@ -38,10 +38,10 @@ while :
 do
   read -r chosen_num 
     if [ "$chosen_num" = "1" ]; then
-      bash init.sh
+      bash init/init.sh
       break
     elif [ "$chosen_num" = "2" ]; then
-      sh ../exe/main.sh
+      sh exe/main.sh
       break
     else
       echo "Input 1 or 2 key"

@@ -14,7 +14,7 @@ def main():
     schedule.every().day.at(get_up_time).do(sound)
     # アラーム待ち
     while True:
-        if not os.path.isfile("../alarm/alarm_set.dat"):
+        if not os.path.isfile("alarm_set.dat"):
             return schedule.CancelJob()
         schedule.run_pending()
         time.sleep(1)
@@ -37,13 +37,13 @@ def get_time(string):
 # 音再生処理
 def sound():
     while True:
-        os.system("play ../alarm/alarm1.mp3")  # パス指定必要な場合はここで
-        if os.path.isfile("../alarm/alarm_set.dat"):
-            with open("../alarm/alarm_set.dat","w") as f:
+        os.system("play alarm/alarm1.mp3")  # パス指定必要な場合はここで
+        if os.path.isfile("alarm_set.dat"):
+            with open("alarm_set.dat","w") as f:
                 alarm_ringed = str(1)
                 f.write(alarm_ringed)
         time.sleep(1)
-        if not os.path.isfile("../alarm/alarm_set.dat"):
+        if not os.path.isfile("alarm_set.dat"):
             return schedule.CancelJob()
 
 

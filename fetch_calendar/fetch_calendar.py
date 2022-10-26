@@ -26,7 +26,7 @@ def get_creds():
         # アクセストークンを要求
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
-                'fetch_calendar/credentials.json', SCOPES)
+                'credentials.json', SCOPES)
             creds = flow.run_local_server(port=0)
         # アクセストークン保存（２回目以降の実行時に認証を省略するため）
         with open("token.pickle", "wb") as token:
