@@ -5,7 +5,7 @@ import sys
 import requests
 from bs4 import BeautifulSoup
 
-from fetch_calendar.fetch_calendar import fetch_first_destination
+from fetch_calendar import fetch_calendar
 
 DIR_INIT = "../init"
 
@@ -60,7 +60,7 @@ def generate_route_url(departure_station: str, destination_information: str) -> 
 
 def main():
     departure_station = fetch_departure_station()
-    destination_information = fetch_first_destination()
+    destination_information = fetch_calendar.fetch_first_destination()
     if destination_information is None:
         return "電車の用事はありません"
 
