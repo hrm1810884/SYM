@@ -10,86 +10,122 @@ from googleapiclient.discovery import build
 SCOPES = ["https://www.googleapis.com/auth/calendar"]
 
 
-def get_creds():
-    # Google にcalendarへのアクセストークンを要求してcredsに格納します。
-    creds = None
+def generate_credentials():
+    """credentials を取得する
 
-    # 有効なトークンをすでに持っているかチェック（２回目以降の実行時に認証を省略するため）
+    Returns
+    -------
+    object
+        credentials の中身
+    """
+    credentials = None
+
+    # 既にアクセストークンを取得していればそれを持ってくる
     if os.path.exists("token.pickle"):
         with open("token.pickle", "rb") as token:
-            creds = pickle.load(token)
+            credentials = pickle.load(token)
 
-    # 期限切れのトークンを持っているかチェック（認証を省略するため）
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
+    if not credentials or not credentials.valid:
+        if credentials and credentials.expired and credentials.refresh_token:
+            credentials.refresh(Request())
+
         # アクセストークンを要求
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
-                'credentials.json', SCOPES)
-            creds = flow.run_local_server(port=0)
+                "credentials.json", SCOPES
+            )
+            credentials = flow.run_local_server(port=0)
+
         # アクセストークン保存（２回目以降の実行時に認証を省略するため）
         with open("token.pickle", "wb") as token:
-            pickle.dump(creds, token)
-    return creds
+            pickle.dump(credentials, token)
+    return credentials
 
 
-def get_txt(events):
-    output = []
+def generate_events_text(events):
+    """用事の文面を生成する
+
+    Parameters
+    ----------
+    events : object
+        用事を入れたオブジェクト
+
+    Returns
+    -------
+    str
+        用事をまとめた文面
+    """
     if not events:
-        output.append("今日は特別な日程はありません")
-    # 予定があった場合には、出力
-    else:
-        for event in events:
-            if event["start"].get("dateTime") is None:
-                output.append("終日" + event["summary"] + "があります")
-            else:
-                start = event["start"].get("dateTime")
-                end = event["end"].get("dateTime")
-                start_ymd, start_time = start.split("T")
-                start_d = start_ymd.split("-")[2]
-                start_hour, start_minute, start_else = start_time.split(":", 2)
-                end_ymd, end_time = end.split("T")
-                end_d = end_ymd.split("-")[2]
-                end_hour, end_minute, end_else = end_time.split(":", 2)
-                if end_d > start_d:
-                    end_hour = str(int(end_hour) + 24)
-                output.append(
-                    start_hour
-                    + "時"
-                    + start_minute
-                    + "分から"
-                    + end_hour
-                    + "時"
-                    + end_minute
-                    + "分まで"
-                    + event["summary"]
-                    + "があります"
-                )
+        return "今日は特別な日程はありません"
+
+    result = []
+    for event in events:
+        if event["start"].get("dateTime") is None:
+            result.append("終日" + event["summary"] + "があります")
+        else:
+            start = event["start"].get("dateTime")
+            start_ymd, start_time = start.split("T")
+            start_day = start_ymd.split("-")[2]
+            start_hour, start_minute, _ = start_time.split(":", 2)
+
+            end = event["end"].get("dateTime")
+            end_ymd, end_time = end.split("T")
+            end_day = end_ymd.split("-")[2]
+            end_hour, end_minute, _ = end_time.split(":", 2)
+            if end_day > start_day:
+                end_hour = str(int(end_hour) + 24)
+
+            result.append(
+                start_hour
+                + "時"
+                + start_minute
+                + "分から"
+                + end_hour
+                + "時"
+                + end_minute
+                + "分まで"
+                + event["summary"]
+                + "があります"
+            )
 
     result = '  '.join(output)
     return result
 
 
-def get_destination():
+def fetch_first_destination():
+    """その日の予定の最初のものの場所を取得
+
+    Returns
+    -------
+    str
+        その日の予定の最初のものの場所
+    """
     events = fetch_events()
     if not events:
         return None
-    else:
-        if 'location' in events[0]:
-            start = events[0]["start"].get("dateTime")
-            start_ymd, start_time = start.split("T")
-            start_hour, start_minute, start_else = start_time.split(":", 2)
-            return [events[0]['location'], start_hour, start_minute]
-        else:
-            return None
+
+    first_event = events[0]
+    if "location" in first_event:
+        start = first_event["start"].get("dateTime")
+        _, start_time = start.split("T")
+        start_hour, start_minute, _ = start_time.split(":", 2)
+        return [first_event["location"], start_hour, start_minute]
+
+    return None
 
 
 def fetch_events():
-    creds = get_creds()
+    """その日の予定の一覧を取得する
+
+    Returns
+    -------
+    object
+        その日の予定の一覧
+    """
+    credentials = generate_credentials()
 
     # カレンダーAPI操作に必要なインスタンス作成
-    service = build("calendar", "v3", credentials=creds)
+    service = build("calendar", "v3", credentials=credentials)
 
     # 現在時刻を取得
     now = datetime.datetime.utcnow().isoformat() + "Z"  # 'Z' indicates UTC time
@@ -118,7 +154,7 @@ def fetch_events():
 
 def main():
     events = fetch_events()
-    return get_txt(events)
+    return generate_events_text(events)
 
 
 if __name__ == "__main__":
