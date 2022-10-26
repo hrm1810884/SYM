@@ -72,7 +72,7 @@ def exe(question):
             os.remove("already_asked.dat")
         with open("../alarm/alarm_set.dat", mode="w") as f:
             f.write("0")  # alarm_ringed として読まれる
-        proc = subprocess.Popen(
+        subprocess.Popen(
             "python3 ../alarm/alarm.py {0} {1}".format(alarm_hour, alarm_minute),
             shell=True,
         )
