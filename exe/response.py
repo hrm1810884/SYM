@@ -1,72 +1,120 @@
 #!/usr/bin/env python3
 # coding: utf-8
-#
-# 応答生成モジュール
-# 基本的には
-# - 入力と応答の対応リスト(argv[1])
-# - 話者認識結果ID (argv[2])
-# - 音声認識結果 (argv[3])
-# を受け取って応答文および音声を生成する
-#
-# 前の応答への依存性を持たせたい場合は引数を追加すれば良い
+
 import os
+import subprocess
 import sys
 
 from alarm import alarm
-from alarm import alarm_set
 from fetch_calendar import fetch_calendar
-from fetch_weather import fetch_weather
 from fetch_time_to_go import fetch_time_to_go
+from fetch_weather import fetch_weather
 
 jtalkbin = "open_jtalk "
 options = (
-    "-m"
-    + " /usr/share/hts-voice/nitech-jp-atr503-m001/nitech_jp_atr503_m001.htsvoice"
+    "-m "
+    + "/usr/share/hts-voice/nitech-jp-atr503-m001/nitech_jp_atr503_m001.htsvoice"
     + " -ow /tmp/dialogue/out.wav -x /var/lib/mecab/dic/open-jtalk/naist-jdic"
 )
 
 
-# 音声合成のコマンドを生成 (open jtalk を 使う場合）
 def mk_jtalk_command(answer):
+    """音声情報のコマンドを生成する
+
+    Parameters
+    ----------
+    answer : str
+        応答する内容
+
+    Returns
+    -------
+    str
+        音声情報のコマンド
+    """
     jtalk = 'echo "' + answer + '" | ' + jtalkbin + options + ";"
     play = "play -q /tmp/dialogue/out.wav; rm /tmp/dialogue/out.wav;"
     return jtalk + play
 
+def reform_answer(answer):
+    if '所' in answer:
+        answer.replace('所','ところ')
+    if '℃' in answer:
+        answer.replace('℃ ', '℃')
+    if '時00分' in answer:
+        answer.replace('時00分','時')
 
-if __name__ == "__main__":
-    # # 応答を辞書 reply に登録
-    # conf = open(sys.argv[1],'r')
-    # #conf = codecs.open(sys.argv[1],'r','utf8','ignore')
-    # reply = {}
-    # for line in conf:
-    #     line = line.rstrip()
-    #     a = line.split();
-    #     reply[a[0]] = a[1]
-    # conf.close()
 
-    # 話者ID
-    sid = int(sys.argv[2])
+def exe(question):
+    """質問内容に応じて応答を返す
 
-    # 認識結果
+    Parameters
+    ----------
+    question : str
+        質問文
+
+    Returns
+    -------
+    str
+        SYM の応答
+    """
+    if "天気" in question:
+        open("already_asked.dat", "w")
+        answer = fetch_weather.main(detail_required=False, clothes_required=False)
+        answer = answer.replace('℃', '℃ ')
+    elif "詳しく" in question:
+        answer = fetch_weather.main(
+            detail_required=os.path.isfile("already_asked.dat"),
+            clothes_required=False
+        )
+        answer = answer.replace('℃', '℃ ')
+    elif "服" in question:
+        answer = fetch_weather.main(detail_required=False, clothes_required=True)
+    elif "予定" in question:
+        answer = fetch_calendar.main()
+    elif "出発" in question:
+        answer = fetch_time_to_go.main()
+    elif "時" in question:
+        alarm_hour, alarm_minute = alarm.get_time(question)
+        answer = f"アラームを{alarm_hour}時{alarm_minute}分に設定しました"
+        if os.path.isfile("already_asked.dat"):
+            os.remove("already_asked.dat")
+        with open("alarm_set.dat", mode="w") as f:
+            f.write("0")
+        subprocess.Popen(
+            "python3 alarm/alarm.py {0} {1}".format(alarm_hour, alarm_minute),
+            shell=True,
+        )
+    elif "止" in question:
+        if os.path.isfile("alarm_set.dat"):
+            with open("alarm_set.dat") as f:
+                alarm_ringed = bool(int(f.read()))  # 0 or 1
+                print(alarm_ringed)
+            answer = "おはようございます" if alarm_ringed else "アラームを解除しました"
+            os.remove("alarm_set.dat")
+        else:
+            answer = "アラームがセットされていません"
+    else:
+        answer = "認識できません．もう一度お願いします"
+
+    return answer
+
+
+def main():
+    # 認識情報を取得
+    speaker_id = int(sys.argv[2])
     asrresult = open(sys.argv[3], "r")
     question = asrresult.read().rstrip()
     asrresult.close()
 
-    alarm_status = int(sys.argv[4])
-
     # 話者ID と認識結果を表示
-    print(f"SPK{sid}:{question}")
+    print(f"SPK{speaker_id}:{question}")
 
-    answer = ''
-    if "天気" in question:
-        answer += fetch_weather.main()
-    if "予定" in question:
-        answer += fetch_calendar.main()
-    if "出発" in question:
-        answer += fetch_time_to_go.main()
-    if "時" in question:
-        time = alarm_set.main()
-        answer += "アラームを" + time[0] + "時" + time[1] + "分に設定しました"
-        alarm.main(time)
-        
+    answer = exe(question)
+
+    print("SYM:" + answer.replace('  ', '\n    '))
+    reform_answer(answer)
     os.system(mk_jtalk_command(answer))
+
+
+if __name__ == "__main__":
+    main()

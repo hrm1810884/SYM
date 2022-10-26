@@ -1,23 +1,6 @@
 #!/bin/bash
 
-FILE_INIT="./init.dat"
-
-clear
-echo "┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓"
-echo "┃                                 ┃"
-echo -n "┃         "
-echo -n -e "\033[1mWelcome to SYM\033[m"
-echo -e "\033[0m          \033[m┃"
-echo "┃                                 ┃"
-echo "┃ Smarter than You in the Morning ┃"
-echo "┃                                 ┃"
-echo "┃    Press any key to continue    ┃"
-echo "┃                                 ┃"
-echo "┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛"
-
-stty -echo
-read -r _
-stty echo
+FILE_INIT="./init/init.dat"
 
 clear
 
@@ -33,7 +16,19 @@ if [ -f "$FILE_INIT" ]; then
       break
     elif [ "$input_comfirmation" == 'n' ] || [ "$input_comfirmation" == 'N' ] || [ -z "$input_comfirmation" ]; then
       echo "No"
-      exit 0
+      while :
+      do
+        echo -ne "start SYM? [y/N]"
+        read -r input_comfirmation
+        if [ "$input_comfirmation" == 'Y' ] || [ "$input_comfirmation" == 'y' ]; then
+          echo "Yes"
+          sh exe/main.sh
+          break
+        elif [ "$input_comfirmation" == 'n' ] || [ "$input_comfirmation" == 'N' ] || [ -z "$input_comfirmation" ]; then
+          echo "No"
+          exit 0
+        fi
+      done
     fi
   done
 fi
@@ -60,7 +55,7 @@ do
   while read -r prefecture _
   do
     echo -ne "$prefecture\t"
-  done < "./data/jma_prefecture.dat"
+  done < "./init/data/jma_prefecture.dat"
   echo ""
   read -r input_prefecture
   if [ "$input_prefecture" == "東京都" ]; then
@@ -75,7 +70,7 @@ echo "Select the nearest city from below:"
 while read -r city _
 do
   echo -ne "$city\t"
-done < "./data/amd_city_tokyo.dat"
+done < "./init/data/amd_city_tokyo.dat"
 echo ""
 read -r input_city
 echo -e "city $input_city" >> "$FILE_INIT"
@@ -83,4 +78,18 @@ echo -e "city $input_city" >> "$FILE_INIT"
 echo "Thank you for letting me know about you!"
 echo "Installing some modules...."
 sleep 2
-pip install -r requirements.txt
+pip install -r ./init/requirements.txt
+echo "all complete"
+while :
+do
+  echo -ne "start SYM? [y/N]"
+  read -r input_comfirmation
+  if [ "$input_comfirmation" == 'Y' ] || [ "$input_comfirmation" == 'y' ]; then
+    echo "Yes"
+    sh exe/main.sh
+    break
+  elif [ "$input_comfirmation" == 'n' ] || [ "$input_comfirmation" == 'N' ] || [ -z "$input_comfirmation" ]; then
+    echo "No"
+    exit 0
+  fi
+done
