@@ -47,7 +47,7 @@ def get_time():
     yyyymmdd = latest_datetime.strftime("%Y%m%d")  # 年月日　- アメダスデータ取得時に必要
     # 3時間ごとの時間 - アメダスデータ取得時に必要
     h3 = ("0" + str((latest_datetime.hour // 3) * 3))[-2:]
-    return [yyyymmdd, h3]
+    return [yyyymmdd, h3, latest_datetime]
 
 
 def recommend_clothes(date, tmp_min, tmp_max):
@@ -91,7 +91,7 @@ def recommend_clothes(date, tmp_min, tmp_max):
         else:
             output.append("暑くなりますので半袖や薄手の長袖をおすすめします")
 
-    return ";".join(output)
+    return "  ".join(output)
 
 
 def judge_pop(latest_precipitation):
@@ -110,9 +110,9 @@ def judge_pop(latest_precipitation):
     return pop_string
 
 
-def main(detail_required=False):
+def main(detail_required=False, clothes_asking=False):
     prefecture_num, city_num = get_place()
-    date, hour = get_time()
+    date, hour, datetime = get_time()
     # 気象庁のデータ取得
     jma_url = (
         "https://www.jma.go.jp/bosai/forecast/data/forecast/"
@@ -146,18 +146,21 @@ def main(detail_required=False):
     latest_precipitation10m = amd_json[latest_key]["precipitation10m"][0]
 
     output = []
-    output.append("本日の天気は" + jma_weather)
-    output.append("現在の気温は" + str(latest_temp[0]) + "℃です")
-    if detail_required:
-        output.append(
-            "最低気温は" + str(jma_temp_min) + "℃，" + "最高気温は" + str(jma_temp_max) + "℃です"
-        )
-        output.append(judge_pop(latest_precipitation10m))
-        output.append("今後の降水確率は４時間ごとに，" + "%，".join(map(str, jma_pops)) + "%です")
-
+    if clothes_asking:
         output.append(recommend_clothes(date, float(jma_temp_min), float(jma_temp_max)))
+    else:
+        output.append("本日の天気は" + jma_weather)
+        output.append("現在の気温は" + str(latest_temp[0]) + "℃です")
+        if detail_required:
+            output.append(
+                "最低気温は" + str(jma_temp_min) + "℃，" + "最高気温は" + str(jma_temp_max) + "℃です"
+            )
+            output.append(judge_pop(latest_precipitation10m))
+            output.append(
+                "午前中の降水確率は" + jma_pops[0] + "%，午後の降水確率は" + jma_pops[1] + "%です"
+            )
 
-    return ",".join(output)
+    return "  ".join(output)
 
 
 if __name__ == "__main__":

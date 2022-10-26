@@ -39,10 +39,19 @@ if __name__ == "__main__":
 
     if "天気" in question:
         open("already_asked.dat", "w")
-        answer = fetch_weather.main(False)
+        already_asked = False
+        clothes_asking = False
+        answer = fetch_weather.main(already_asked, clothes_asking)
+        answer = answer.replace('℃', '℃ ')
     elif "詳しく" in question:
         already_asked = os.path.isfile("already_asked.dat")
-        answer = fetch_weather.main(already_asked)
+        clothes_asking = False
+        answer = fetch_weather.main(already_asked, clothes_asking)
+        answer = answer.replace('℃', '℃ ')
+    elif "服" in question:
+        already_asked = False
+        clothes_asking = True
+        answer = fetch_weather.main(already_asked, clothes_asking)
     elif "予定" in question:
         answer = fetch_calendar.main()
     elif "出発" in question:
@@ -74,5 +83,6 @@ if __name__ == "__main__":
     else:
         answer = "認識できません．もう一度お願いします"
 
-    print("SYM:" + answer)
+    print("SYM:" + answer.replace('  ', '\n    '))
+    answer = answer.replace('℃ ', '℃')
     os.system(mk_jtalk_command(answer))
