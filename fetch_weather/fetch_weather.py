@@ -91,7 +91,7 @@ def recommend_clothes(date, tmp_min, tmp_max):
         else:
             output.append("暑くなりますので半袖や薄手の長袖をおすすめします")
 
-    return ";".join(output)
+    return "  ".join(output)
 
 
 def judge_pop(latest_precipitation):
