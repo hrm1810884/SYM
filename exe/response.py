@@ -1,19 +1,11 @@
 #!/usr/bin/env python3
 # coding: utf-8
-#
-# 応答生成モジュール
-# 基本的には
-# - 入力と応答の対応リスト(argv[1])
-# - 話者認識結果ID (argv[2])
-# - 音声認識結果 (argv[3])
-# を受け取って応答文および音声を生成する
-#
-# 前の応答への依存性を持たせたい場合は引数を追加すれば良い
+
 import os
 import subprocess
 import sys
 
-from alarm import alarm_set
+from alarm import alarm
 from fetch_calendar import fetch_calendar
 from fetch_time_to_go import fetch_time_to_go
 from fetch_weather import fetch_weather
@@ -45,32 +37,52 @@ if __name__ == "__main__":
     # 話者ID と認識結果を表示
     print(f"SPK{sid}:{question}")
 
-    answer = ""
-    #question = "5時に起こして"
     if "天気" in question:
-        answer += fetch_weather.main()
-        print("SYM:"+answer)
+        open("already_asked.dat", "w")
+        already_asked = False
+        clothes_asking = False
+        answer = fetch_weather.main(already_asked, clothes_asking)
+        answer = answer.replace('℃', '℃ ')
+    elif "詳しく" in question:
+        already_asked = os.path.isfile("already_asked.dat")
+        clothes_asking = False
+        answer = fetch_weather.main(already_asked, clothes_asking)
+        answer = answer.replace('℃', '℃ ')
+    elif "服" in question:
+        already_asked = False
+        clothes_asking = True
+        answer = fetch_weather.main(already_asked, clothes_asking)
     elif "予定" in question:
-        answer += fetch_calendar.main()
-        print("SYM:"+answer)
+        answer = fetch_calendar.main()
     elif "出発" in question:
-        answer += fetch_time_to_go.main()
-        print("SYM:"+answer)
+        answer = fetch_time_to_go.main()
     elif "時" in question:
-        alarm_hour, alarm_minute = alarm_set.main(question)
-        answer += f'アラームを{alarm_hour}時{alarm_minute}分に設定しました'
-        print("SYM:"+answer)
-        proc = subprocess.run("../alarm/asr-recog.sh", shell=True)
-        path_txt = '../alarm/alarm_set_tmp.txt'
-        with open(path_txt, mode='w') as f:
-            f.write(answer)
-        proc = subprocess.run("./alarm/asr-recog.sh", shell=True)
-        answer = "おはようございます"
+        alarm_hour, alarm_minute = alarm.get_time(question)
+        answer = f"アラームを{alarm_hour}時{alarm_minute}分に設定しました"
+        if os.path.isfile("already_asked.dat"):
+            os.remove("already_asked.dat")
+        with open("../alarm/alarm_set.dat", mode="w") as f:
+            alarm_ringed = str(0)
+            f.write(alarm_ringed)
+        proc = subprocess.Popen(
+            "python3 ../alarm/alarm.py {0} {1}".format(alarm_hour, alarm_minute),
+            shell=True,
+        )
     elif "止" in question:
-        answer += "アラームがセットされていません。"
-        print("SYM:"+answer)
+        if os.path.isfile("../alarm/alarm_set.dat"):
+            with open("../alarm/alarm_set.dat") as f:
+                alarm_ringed = bool(int(f.read()))  # 0 or 1
+                print(alarm_ringed)
+                if alarm_ringed:
+                    answer = "おはようございます"
+                else:
+                    answer = "アラームを解除しました"
+            os.remove("../alarm/alarm_set.dat")
+        else:
+            answer = "アラームがセットされていません"
     else:
-        answer += "認識できません。もう一度お願いします。"
-        print("SYM:"+answer)
+        answer = "認識できません．もう一度お願いします"
 
+    print("SYM:" + answer.replace('  ', '\n    '))
+    answer = answer.replace('℃ ', '℃')
     os.system(mk_jtalk_command(answer))
