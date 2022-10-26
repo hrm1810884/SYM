@@ -26,11 +26,12 @@ def mk_jtalk_command(answer):
 
 def reform_answer(answer):
     if '所' in answer:
-        answer.replace('所','ところ')
+        answer = answer.replace('所','ところ')
     if '℃' in answer:
-        answer.replace('℃ ', '℃')
+        answer = answer.replace('℃ ', '度')
     if '時00分' in answer:
-        answer.replace('時00分','時')
+        answer = answer.replace('時00分','時')
+    return answer
 
 
 if __name__ == "__main__":
@@ -92,5 +93,4 @@ if __name__ == "__main__":
         answer = "認識できません．もう一度お願いします"
 
     print("SYM:" + answer.replace('  ', '\n    '))
-    reform_answer(answer)
-    os.system(mk_jtalk_command(answer))
+    os.system(mk_jtalk_command(reform_answer(answer)))
