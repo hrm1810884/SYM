@@ -110,7 +110,7 @@ def judge_pop(latest_precipitation):
     return pop_string
 
 
-def main(detail_required=False,clothes_asking=False):
+def main(detail_required=False, clothes_asking=False):
     prefecture_num, city_num = get_place()
     date, hour, datetime = get_time()
     # 気象庁のデータ取得
@@ -156,7 +156,9 @@ def main(detail_required=False,clothes_asking=False):
                 "最低気温は" + str(jma_temp_min) + "℃，" + "最高気温は" + str(jma_temp_max) + "℃です"
             )
             output.append(judge_pop(latest_precipitation10m))
-            output.append("午前中の降水確率は" + jma_pops[0] + "%，午後の降水確率は" + jma_pops[1] + "%です")
+            output.append(
+                "午前中の降水確率は" + jma_pops[0] + "%，午後の降水確率は" + jma_pops[1] + "%です"
+            )
 
     return "  ".join(output)
 
