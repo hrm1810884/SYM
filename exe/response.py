@@ -111,13 +111,12 @@ def exe(question):
 
 def main():
     # 認識情報を取得
-    speaker_id = int(sys.argv[2])
-    asrresult = open(sys.argv[3], "r")
+    asrresult = open(sys.argv[1], "r")
     question = asrresult.read().rstrip()
     asrresult.close()
 
     # 話者ID と認識結果を表示
-    print(f"SPK{speaker_id}:{question}")
+    print(f"{question}")
 
     answer = exe(question)
 
