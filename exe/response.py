@@ -82,7 +82,7 @@ def exe(question):
     elif "出発" in question:
         answer = fetch_time_to_go.main()
     elif "時" in question:
-        if os.path.isfile("alarm_set.dat"):
+        if os.path.isfile("tmp/alarm_set.dat"):
             answer = "既にアラームがセットされています"
         else:
             alarm_hour, alarm_minute = alarm.extract_time_from_command(question)
