@@ -47,13 +47,13 @@ if __name__ == "__main__":
     print(f"SPK{sid}:{question}")
 
     if "天気" in question:
-        open("already_asked.dat", "w")
+        open("tmp/already_asked.dat", "w")
         already_asked = False
         clothes_asking = False
         answer = fetch_weather.main(already_asked, clothes_asking)
         answer = answer.replace('℃', '℃ ')
     elif "詳しく" in question:
-        already_asked = os.path.isfile("already_asked.dat")
+        already_asked = os.path.isfile("tmp/already_asked.dat")
         clothes_asking = False
         answer = fetch_weather.main(already_asked, clothes_asking)
         answer = answer.replace('℃', '℃ ')
@@ -68,9 +68,9 @@ if __name__ == "__main__":
     elif "時" in question:
         alarm_hour, alarm_minute = alarm.get_time(question)
         answer = f"アラームを{alarm_hour}時{alarm_minute}分に設定しました"
-        if os.path.isfile("already_asked.dat"):
-            os.remove("already_asked.dat")
-        with open("alarm_set.dat", mode="w") as f:
+        if os.path.isfile("tmp/already_asked.dat"):
+            os.remove("tmp/already_asked.dat")
+        with open("tmp/alarm_set.dat", mode="w") as f:
             alarm_ringed = str(0)
             f.write(alarm_ringed)
         proc = subprocess.Popen(
@@ -78,15 +78,15 @@ if __name__ == "__main__":
             shell=True,
         )
     elif "止" in question:
-        if os.path.isfile("alarm_set.dat"):
-            with open("alarm_set.dat") as f:
+        if os.path.isfile("tmp/alarm_set.dat"):
+            with open("tmp/alarm_set.dat") as f:
                 alarm_ringed = bool(int(f.read()))  # 0 or 1
                 print(alarm_ringed)
                 if alarm_ringed:
                     answer = "おはようございます"
                 else:
                     answer = "アラームを解除しました"
-            os.remove("alarm_set.dat")
+            os.remove("tmp/alarm_set.dat")
         else:
             answer = "アラームがセットされていません"
     else:

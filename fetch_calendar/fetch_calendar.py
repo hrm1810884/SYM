@@ -15,8 +15,8 @@ def get_creds():
     creds = None
 
     # 有効なトークンをすでに持っているかチェック（２回目以降の実行時に認証を省略するため）
-    if os.path.exists("token.pickle"):
-        with open("token.pickle", "rb") as token:
+    if os.path.exists("tmp/token.pickle"):
+        with open("tmp/token.pickle", "rb") as token:
             creds = pickle.load(token)
 
     # 期限切れのトークンを持っているかチェック（認証を省略するため）
@@ -26,10 +26,10 @@ def get_creds():
         # アクセストークンを要求
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
-                'credentials.json', SCOPES)
+                'tmp/credentials.json', SCOPES)
             creds = flow.run_local_server(port=0)
         # アクセストークン保存（２回目以降の実行時に認証を省略するため）
-        with open("token.pickle", "wb") as token:
+        with open("tmp/token.pickle", "wb") as token:
             pickle.dump(creds, token)
     return creds
 
