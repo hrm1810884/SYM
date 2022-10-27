@@ -50,6 +50,8 @@ def reform_answer(answer):
         answer = answer.replace("℃ ", "度")
     if "時00分" in answer:
         answer = answer.replace("時00分", "時")
+    if "時0分" in answer:
+        answer = answer.replace("時0分", "時")
     return answer
 
 
