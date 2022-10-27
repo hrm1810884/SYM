@@ -35,13 +35,21 @@ def mk_jtalk_command(answer):
     play = "play -q /tmp/dialogue/out.wav; rm /tmp/dialogue/out.wav;"
     return jtalk + play
 
+
 def reform_answer(answer):
-    if '所' in answer:
-        answer.replace('所','ところ')
-    if '℃' in answer:
-        answer.replace('℃ ', '℃')
-    if '時00分' in answer:
-        answer.replace('時00分','時')
+    """回答を発音しやすいように書き換える
+
+    Parameters
+    ----------
+    answer : str
+        書き換える回答文
+    """
+    if "所" in answer:
+        answer.replace("所", "ところ")
+    if "℃" in answer:
+        answer.replace("℃ ", "℃")
+    if "時00分" in answer:
+        answer.replace("時00分", "時")
 
 
 def exe(question):
@@ -60,13 +68,12 @@ def exe(question):
     if "天気" in question:
         open("already_asked.dat", "w")
         answer = fetch_weather.main(detail_required=False, clothes_required=False)
-        answer = answer.replace('℃', '℃ ')
+        answer = answer.replace("℃", "℃ ")
     elif "詳しく" in question:
         answer = fetch_weather.main(
-            detail_required=os.path.isfile("already_asked.dat"),
-            clothes_required=False
+            detail_required=os.path.isfile("already_asked.dat"), clothes_required=False
         )
-        answer = answer.replace('℃', '℃ ')
+        answer = answer.replace("℃", "℃ ")
     elif "服" in question:
         answer = fetch_weather.main(detail_required=False, clothes_required=True)
     elif "予定" in question:
@@ -74,7 +81,7 @@ def exe(question):
     elif "出発" in question:
         answer = fetch_time_to_go.main()
     elif "時" in question:
-        alarm_hour, alarm_minute = alarm.get_time(question)
+        alarm_hour, alarm_minute = alarm.extract_time_from_command(question)
         answer = f"アラームを{alarm_hour}時{alarm_minute}分に設定しました"
         if os.path.isfile("already_asked.dat"):
             os.remove("already_asked.dat")
@@ -111,7 +118,7 @@ def main():
 
     answer = exe(question)
 
-    print("SYM:" + answer.replace('  ', '\n    '))
+    print("SYM:" + answer.replace("  ", "\n    "))
     reform_answer(answer)
     os.system(mk_jtalk_command(answer))
 
