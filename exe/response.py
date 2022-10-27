@@ -101,7 +101,6 @@ def exe(question):
         if os.path.isfile("tmp/alarm_set.dat"):
             with open("tmp/alarm_set.dat") as f:
                 alarm_ringed = bool(int(f.read()))  # 0 or 1
-                print(alarm_ringed)
             answer = "おはようございます" if alarm_ringed else "アラームを解除しました"
             os.remove("tmp/alarm_set.dat")
         else:
