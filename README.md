@@ -28,3 +28,5 @@
 - [【Colab / Python】気象庁API - 気象データの収集](https://qiita.com/T_Ryota/items/ef96d6575404a0fd46dd)
 - [yahoo路線乗り換え案内の情報を抽出したい](https://qiita.com/hirohiroto522/items/2fc33cbc36ea8600f867)
 - [yahoo路線の運行情報を取得したい](https://qiita.com/hirohiroto522/items/6ff29be1344be805ecb0)
+- [Pythonからシェルコマンドを実行！subprocessでサブプロセスを実行する方法まとめ](https://dev.classmethod.jp/articles/python-subprocess-shell-command/)
+- [あpython　subprocess.run内のコマンドで　変数を利用したい](https://teratail.com/questions/183775)
