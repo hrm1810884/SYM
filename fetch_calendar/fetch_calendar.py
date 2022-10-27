@@ -87,9 +87,8 @@ def generate_events_text(events):
                 + event["summary"]
                 + "があります"
             )
-
-    result = '  '.join(output)
-    return result
+ 
+    return '  '.join(result)
 
 
 def fetch_first_destination():
