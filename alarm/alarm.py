@@ -1,61 +1,60 @@
 import os
+import sys
 import time
 
 import schedule
 
 
 def main():
-    input_command = input()
-    while True:
-        print(input_command)
-        if not command_is_stop(input_command):
-            break
-        time.sleep(5)
-        input_command = input()
+    hour = sys.argv[1]
+    minute = sys.argv[2]
 
-    (hour, minute) = calc_time_from_command(input_command)
-    # test
-    # hour = 15
-    # minute = 36
-
-    target = f"{str(hour).zfill(2)}:{str(minute).zfill(2)}"
-    print(target + "にアラームをセットしました")
     # アラーム時間設定
-    schedule.every().day.at(target).do(sound)
+    get_up_time = f"{str(hour).zfill(2)}:{str(minute).zfill(2)}"
+    schedule.every().day.at(get_up_time).do(sound)
+
     # アラーム待ち
     while True:
+        if not os.path.isfile("alarm_set.dat"):
+            return schedule.CancelJob()
         schedule.run_pending()
         time.sleep(1)
 
 
-# 目覚まし設定時間取得
-def calc_time_from_command(string):
-    minute = 0
-    hour = 0
-    for char in string:
+def extract_time_from_command(command):
+    """文字列からアラームの時刻を計算する
+
+    Parameters
+    ----------
+    command : str
+        入力されたコマンド
+
+    Returns
+    -------
+    tuple
+        (アラームをセットする時, アラームをセットする分)
+    """
+    for char in command:
         if char == "1":
             hour = 10
         if char in ["5", "6", "7", "8", "9"]:
             hour = int(char)
-        if char == "3" or char == "半":
+        if char in ["3", "半"]:
             minute = 30
-    return (hour, minute)
+    return hour, minute
 
 
-def command_is_stop(string):
-    return "止" in string
-
-
-# 音再生処理
 def sound():
+    """音を鳴らす
+    """
     while True:
-        os.system("play alarm1.mp3")  # パス指定必要な場合はここで
-        time.sleep(5)
-        input_command = input()
-        print(input_command)
-        if command_is_stop(input_command):
-            print("alarm stopped")
-            exit()
+        os.system("play alarm/alarm1.mp3")  # パス指定必要な場合はここで
+        if os.path.isfile("alarm_set.dat"):
+            with open("alarm_set.dat", "w") as f:
+                f.write("1")
+        time.sleep(1)
+        if not os.path.isfile("alarm_set.dat"):
+            return schedule.CancelJob()
 
 
 if __name__ == "__main__":
