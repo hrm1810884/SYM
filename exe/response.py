@@ -45,11 +45,12 @@ def reform_answer(answer):
         書き換える回答文
     """
     if "所" in answer:
-        answer.replace("所", "ところ")
+        answer = answer.replace("所", "ところ")
     if "℃" in answer:
-        answer.replace("℃ ", "℃")
+        answer = answer.replace("℃ ", "℃")
     if "時00分" in answer:
-        answer.replace("時00分", "時")
+        answer = answer.replace("時00分", "時")
+    return answer
 
 
 def exe(question):
@@ -66,12 +67,12 @@ def exe(question):
         SYM の応答
     """
     if "天気" in question:
-        open("already_asked.dat", "w")
+        open("tmp/already_asked.dat", "w")
         answer = fetch_weather.main(detail_required=False, clothes_required=False)
         answer = answer.replace("℃", "℃ ")
     elif "詳しく" in question:
         answer = fetch_weather.main(
-            detail_required=os.path.isfile("already_asked.dat"), clothes_required=False
+            detail_required=os.path.isfile("tmp/already_asked.dat"), clothes_required=False
         )
         answer = answer.replace("℃", "℃ ")
     elif "服" in question:
@@ -86,26 +87,25 @@ def exe(question):
         else:
             alarm_hour, alarm_minute = alarm.extract_time_from_command(question)
             answer = f"アラームを{alarm_hour}時{alarm_minute}分に設定しました"
-            if os.path.isfile("already_asked.dat"):
-                os.remove("already_asked.dat")
-            with open("alarm_set.dat", mode="w") as f:
+            if os.path.isfile("tmp/already_asked.dat"):
+                os.remove("tmp/already_asked.dat")
+            with open("tmp/alarm_set.dat", mode="w") as f:
                 f.write("0")
             subprocess.Popen(
                 "python3 alarm/alarm.py {0} {1}".format(alarm_hour, alarm_minute),
                 shell=True,
             )
     elif "止" in question:
-        if os.path.isfile("alarm_set.dat"):
-            with open("alarm_set.dat") as f:
+        if os.path.isfile("tmp/alarm_set.dat"):
+            with open("tmp/alarm_set.dat") as f:
                 alarm_ringed = bool(int(f.read()))  # 0 or 1
                 print(alarm_ringed)
             answer = "おはようございます" if alarm_ringed else "アラームを解除しました"
-            os.remove("alarm_set.dat")
+            os.remove("tmp/alarm_set.dat")
         else:
             answer = "アラームがセットされていません"
     else:
         answer = "認識できません．もう一度お願いします"
-
     return answer
 
 
@@ -122,8 +122,7 @@ def main():
     answer = exe(question)
 
     print("SYM:" + answer.replace("  ", "\n    "))
-    reform_answer(answer)
-    os.system(mk_jtalk_command(answer))
+    os.system(mk_jtalk_command(reform_answer(answer)))
 
 
 if __name__ == "__main__":

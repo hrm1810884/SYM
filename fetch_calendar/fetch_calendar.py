@@ -21,8 +21,8 @@ def generate_credentials():
     credentials = None
 
     # 既にアクセストークンを取得していればそれを持ってくる
-    if os.path.exists("token.pickle"):
-        with open("token.pickle", "rb") as token:
+    if os.path.exists("tmp/token.pickle"):
+        with open("tmp/token.pickle", "rb") as token:
             credentials = pickle.load(token)
 
     if not credentials or not credentials.valid:
@@ -32,12 +32,12 @@ def generate_credentials():
         # アクセストークンを要求
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
-                "credentials.json", SCOPES
+                "tmp/credentials.json", SCOPES
             )
             credentials = flow.run_local_server(port=0)
 
         # アクセストークン保存（２回目以降の実行時に認証を省略するため）
-        with open("token.pickle", "wb") as token:
+        with open("tmp/token.pickle", "wb") as token:
             pickle.dump(credentials, token)
     return credentials
 
