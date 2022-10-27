@@ -81,16 +81,19 @@ def exe(question):
     elif "出発" in question:
         answer = fetch_time_to_go.main()
     elif "時" in question:
-        alarm_hour, alarm_minute = alarm.extract_time_from_command(question)
-        answer = f"アラームを{alarm_hour}時{alarm_minute}分に設定しました"
-        if os.path.isfile("already_asked.dat"):
-            os.remove("already_asked.dat")
-        with open("alarm_set.dat", mode="w") as f:
-            f.write("0")
-        subprocess.Popen(
-            "python3 alarm/alarm.py {0} {1}".format(alarm_hour, alarm_minute),
-            shell=True,
-        )
+        if os.path.isfile("alarm_set.dat"):
+            answer = "既にアラームがセットされています"
+        else:
+            alarm_hour, alarm_minute = alarm.extract_time_from_command(question)
+            answer = f"アラームを{alarm_hour}時{alarm_minute}分に設定しました"
+            if os.path.isfile("already_asked.dat"):
+                os.remove("already_asked.dat")
+            with open("alarm_set.dat", mode="w") as f:
+                f.write("0")
+            subprocess.Popen(
+                "python3 alarm/alarm.py {0} {1}".format(alarm_hour, alarm_minute),
+                shell=True,
+            )
     elif "止" in question:
         if os.path.isfile("alarm_set.dat"):
             with open("alarm_set.dat") as f:
