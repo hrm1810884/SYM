@@ -34,6 +34,8 @@ def extract_time_from_command(command):
     tuple
         (アラームをセットする時, アラームをセットする分)
     """
+    hour = 0
+    minute = 0
     for char in command:
         if char == "1":
             hour = 10
