@@ -74,7 +74,8 @@ def exe(question):
         answer = answer.replace("℃", "℃ ")
     elif "詳しく" in question:
         answer = fetch_weather.main(
-            detail_required=os.path.isfile("tmp/already_asked.dat"), clothes_required=False
+            detail_required=os.path.isfile("tmp/already_asked.dat"),
+            clothes_required=False,
         )
         answer = answer.replace("℃", "℃ ")
     elif "服" in question:
@@ -84,7 +85,7 @@ def exe(question):
     elif "出発" in question:
         answer = fetch_time_to_go.main()
     elif "時" in question:
-        if os.path.isfile("alarm_set.dat"):
+        if os.path.isfile("tmp/alarm_set.dat"):
             answer = "既にアラームがセットされています"
         else:
             alarm_hour, alarm_minute = alarm.extract_time_from_command(question)
