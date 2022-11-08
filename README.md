@@ -20,6 +20,7 @@
 - [Waking up is the hardest thing I do all day: Sleep inertia and sleep drunkenness](https://pubmed.ncbi.nlm.nih.gov/27692973/)
 - [Sleep inertia, sleep homeostatic, and circadian influences on higher-order cognitive functions](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5124508/)
 - [【Python】GoogleカレンダーAPIを操作して予定の取得・追加をする方法](https://kosuke-space.com/google-calendar-api-python)
+- [Python3で目覚ましを作る - Qiita](https://qiita.com/Rxxx/items/d1f7d9a08dacf693b0a9)
 - [PythonでGoogleカレンダーAPIを使用する方法](https://maasaablog.com/development/python/4744/)
 - [Python で Google Calendar API を使ってみた](https://www.coppla-note.net/posts/tutorial/google-calendar-api/)
 - [【Python】気象庁API から天気予報を取得してみた](https://qiita.com/ehjivh/items/121afaecad59a7e11c61)
