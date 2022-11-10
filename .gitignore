@@ -245,5 +245,5 @@ alarmset.yomi
 ### other ###
 *.json
 token.pickle
-init.dat
+init/init.dat
 already_asked*
