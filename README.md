@@ -2,8 +2,6 @@
   <img src=./asset/SYM_logo_text.png width="300">
 </h1>
 
-## これはなに
-
 SYM（Smarter than You in the Morning）は，朝忙しい時間帯に物理的に手が離せないあなたを助ける音声対話システムです．
 
 ## 使い方
@@ -43,8 +41,6 @@ Are you sure to reinitialize? [y/N]
 
 「アラーム止めて」と話すとアラームが止まり、SYMは”おはようございます”と話します.
 
-
-
 ### 天気予報
 
 「今日の天気は？」と話すことで簡易版が発動し，
@@ -76,7 +72,6 @@ Are you sure to reinitialize? [y/N]
 その後，そのうち最も出発時刻の遅いものの出発時刻，路線名を話してくれます．
 
 ## 参考にしたもの
-．`update_references` ブランチからどうぞ
 
 - [Waking up is the hardest thing I do all day: Sleep inertia and sleep drunkenness](https://pubmed.ncbi.nlm.nih.gov/27692973/)
 - [Sleep inertia, sleep homeostatic, and circadian influences on higher-order cognitive functions](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5124508/)
@@ -91,4 +86,4 @@ Are you sure to reinitialize? [y/N]
 - [yahoo路線乗り換え案内の情報を抽出したい](https://qiita.com/hirohiroto522/items/2fc33cbc36ea8600f867)
 - [yahoo路線の運行情報を取得したい](https://qiita.com/hirohiroto522/items/6ff29be1344be805ecb0)
 - [Pythonからシェルコマンドを実行！subprocessでサブプロセスを実行する方法まとめ](https://dev.classmethod.jp/articles/python-subprocess-shell-command/)
-- [あpython　subprocess.run内のコマンドで　変数を利用したい](https://teratail.com/questions/183775)
+- [python　subprocess.run内のコマンドで　変数を利用したい](https://teratail.com/questions/183775)
