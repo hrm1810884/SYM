@@ -57,9 +57,9 @@ def fetch_time_information() -> list:
     latest_time_req = requests.get(latest_time_url)
     latest_datetime = datetime.strptime(
         latest_time_req.text, "%Y-%m-%dT%H:%M:%S%z"
-    )  # タイムゾーン込みで日時文字列をdatetime型へ
-    yyyymmdd = latest_datetime.strftime("%Y%m%d")  # 年月日 - アメダスデータ取得時に必要
-    # ３時間ごとの時間 - アメダスデータ取得時に必要
+    )  # タイムゾーン込みで日時文字列を datetime 型に変換する
+    yyyymmdd = latest_datetime.strftime("%Y%m%d")  # 年月日：アメダスデータ取得時に必要
+    # ３時間ごとの時間：メダスデータ取得時に必要
     h3 = ("0" + str((latest_datetime.hour // 3) * 3))[-2:]
     return [yyyymmdd, h3, latest_datetime]
 
@@ -218,9 +218,8 @@ def main(detail_required=False, clothes_required=False):
     # 全角スペース取得
     jma_weather = jma_weather.replace("　", "")
 
-    latest_key = max(amd_json)  # 最新のアメダスデータが入っているkey
-    latest_temp = amd_json[latest_key]["temp"]  # 最新の気温データを取得, 品質情報を確認
-    # 最新の降水量データを取得, 品質情報を確認
+    latest_key = max(amd_json)  # 最新のアメダスデータが入っている key
+    latest_temp = amd_json[latest_key]["temp"]
     latest_precipitation10m = amd_json[latest_key]["precipitation10m"][0]
 
     output = []

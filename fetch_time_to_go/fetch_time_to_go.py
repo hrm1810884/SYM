@@ -4,6 +4,7 @@ import sys
 
 import requests
 from bs4 import BeautifulSoup
+
 from fetch_calendar import fetch_calendar
 
 DIR_INIT = "init"
@@ -63,17 +64,15 @@ def main():
     if destination_information is None:
         return "電車の用事はありません"
 
-    # Requestsを利用してWebページを取得する
+    # Web サイトの情報の取得
     route_url = generate_route_url(departure_station, destination_information)
     route_response = requests.get(route_url)
-
-    # BeautifulSoupを利用してWebページを解析する
     route_soup = BeautifulSoup(route_response.text, "html.parser")
 
     # 乗り換えの詳細情報を取得
     route_detail = route_soup.find("div", class_="routeDetail")
 
-    # 乗換駅の取得
+    # 乗り換え駅の取得
     stations = []
     stations_elements = route_detail.find_all("div", class_="station")
     for station in stations_elements:
