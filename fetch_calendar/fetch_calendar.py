@@ -32,7 +32,7 @@ def generate_credentials():
         # アクセストークンを要求
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
-                "tmp/credentials.json", SCOPES
+                "init/credentials.json", SCOPES
             )
             credentials = flow.run_local_server(port=0)
 
