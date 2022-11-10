@@ -1,7 +1,6 @@
 #!/bin/bash
 
 FILE_INIT="./init/init.dat"
-
 clear
 
 # ファイルがある場合は本当に初期化するか確認する
@@ -36,12 +35,14 @@ echo -n > "$FILE_INIT"
 echo "Tell me your name"
 read -r input_name
 echo -e "name $input_name" > "$FILE_INIT"
+clear
 
 # 最寄り駅を取得
 echo "Tell me your nearest station（e.g. 本郷三丁目）"
 echo "Note: Don't add '駅' at the end"
 read -r input_nearest_station
 echo -e "nearest_station $input_nearest_station" >> "$FILE_INIT"
+clear
 
 # 都道府県を取得
 while : # 東京都って言わないと終了しない
@@ -58,8 +59,10 @@ do
     echo -e "prefecture $input_prefecture" >> "$FILE_INIT"
     break
   fi
+  clear
   echo -e "I'm sorry but SYM is only for citizen of Tokyo.\n"
 done
+clear
 
 # 都市を取得
 echo "Select the nearest city from below:"
@@ -76,6 +79,8 @@ echo "Installing some modules...."
 sleep 2
 pip install -r ./init/requirements.txt
 echo "all complete"
+clear
+
 while :
 do
   echo -ne "start SYM? [y/N]"
