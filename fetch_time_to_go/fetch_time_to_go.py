@@ -4,7 +4,6 @@ import sys
 
 import requests
 from bs4 import BeautifulSoup
-
 from fetch_calendar import fetch_calendar
 
 DIR_INIT = "init"
@@ -50,7 +49,7 @@ def generate_route_url(departure_station: str, destination_information: str) -> 
         f"https://transit.yahoo.co.jp/search/print?from={departure_station}"
         + f"&flatlon=&to={destination_station}"
         + "&fromgid=&togid=&flatlon=&tlatlon=&via=&viacode="
-        + f"&y={today.year}&m={today.month}&d={today.day}"
+        + f"&y={today.year}&m={str(today.month).zfill(2)}&d={str(today.day).zfill(2)}"
         + f"&hh={arrival_hour}&m1={arrival_minute[0]}&m2={arrival_minute[1]}"
         + "&type=4&ticket=ic&expkind=1&userpass=1&"
         + "ws=2&s=1&al=1&shin=1&ex=1&hb=1&lb=1&sr=1"
@@ -92,8 +91,10 @@ def main():
     station_target = departure_station
     station_idx = stations[0].find(station_target)
     departure_time = stations[0][:station_idx]
-    departure_hour,departure_minute = departure_time.split(":")
-    return f"{departure_hour}時{departure_minute}分に{departure_station}駅，{departure_line}です"
+    departure_hour, departure_minute = departure_time.split(":")
+    return (
+        f"{departure_hour}時{departure_minute}分に{departure_station}駅，{departure_line}です"
+    )
 
 
 if __name__ == "__main__":

@@ -15,7 +15,7 @@ def main():
 
     # アラーム待ち
     while True:
-        if not os.path.isfile("alarm_set.dat"):
+        if not os.path.isfile("tmp/alarm_set.dat"):
             return schedule.CancelJob()
         schedule.run_pending()
         time.sleep(1)
@@ -34,8 +34,8 @@ def extract_time_from_command(command):
     tuple
         (アラームをセットする時, アラームをセットする分)
     """
+    hour = 0
     minute = 0
-    
     for char in command:
         if char == "1":
             hour = 10
@@ -47,15 +47,14 @@ def extract_time_from_command(command):
 
 
 def sound():
-    """音を鳴らす
-    """
+    """音を鳴らす"""
     while True:
         os.system("play alarm/alarm1.mp3")  # パス指定必要な場合はここで
-        if os.path.isfile("alarm_set.dat"):
-            with open("alarm_set.dat", "w") as f:
+        if os.path.isfile("tmp/alarm_set.dat"):
+            with open("tmp/alarm_set.dat", "w") as f:
                 f.write("1")
         time.sleep(1)
-        if not os.path.isfile("alarm_set.dat"):
+        if not os.path.isfile("tmp/alarm_set.dat"):
             return schedule.CancelJob()
 
 

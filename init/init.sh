@@ -12,20 +12,16 @@ if [ -f "$FILE_INIT" ]; then
     echo -ne "Are you sure to reinitialize? [y/N]"
     read -r input_comfirmation
     if [ "$input_comfirmation" == 'Y' ] || [ "$input_comfirmation" == 'y' ]; then
-      echo "Yes"
       break
     elif [ "$input_comfirmation" == 'n' ] || [ "$input_comfirmation" == 'N' ] || [ -z "$input_comfirmation" ]; then
-      echo "No"
       while :
       do
         echo -ne "start SYM? [y/N]"
         read -r input_comfirmation
         if [ "$input_comfirmation" == 'Y' ] || [ "$input_comfirmation" == 'y' ]; then
-          echo "Yes"
           sh exe/main.sh
           break
         elif [ "$input_comfirmation" == 'n' ] || [ "$input_comfirmation" == 'N' ] || [ -z "$input_comfirmation" ]; then
-          echo "No"
           exit 0
         fi
       done

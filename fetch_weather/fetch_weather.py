@@ -230,13 +230,9 @@ def main(detail_required=False, clothes_required=False):
         output.append(f"本日の天気は{jma_weather}")
         output.append(f"現在の気温は{latest_temp[0]}℃です")
         if detail_required:
-            output.append(
-                f"最低気温は{jma_temp_min}℃，最高気温は{jma_temp_max}℃です"
-            )
+            output.append(f"最低気温は{jma_temp_min}℃，最高気温は{jma_temp_max}℃です")
             output.append(tell_about_pop(latest_precipitation10m))
-            output.append(
-                f"午前中の降水確率は{jma_pops[0]}%，午後の降水確率は{jma_pops[1]}%です"
-            )
+            output.append(f"午前中の降水確率は{jma_pops[0]}%，午後の降水確率は{jma_pops[1]}%です")
 
     return "  ".join(output)
 

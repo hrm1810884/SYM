@@ -1,7 +1,5 @@
 #!/bin/bash
 
-FILE_INIT="./init.dat"
-
 clear
 echo "┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓"
 echo "┃                                 ┃"
@@ -21,29 +19,33 @@ stty echo
 
 clear
 
-clear
-echo "┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓"
-echo "┃                                 ┃"
-echo -n "┃      "
-echo -n -e "\033[1mChoose the function\033[m"
-echo -e "\033[0m        \033[m┃"
-echo "┃                                 ┃"
-echo "┃      1. Initial Setting         ┃"
-echo "┃      2. Get start SYM           ┃"
-echo "┃        Press 1 or 2             ┃"
-echo "┃                                 ┃"
-echo "┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛"
+activate_selected=0
 
 while :
 do
-  read -r chosen_num 
-    if [ "$chosen_num" = "1" ]; then
-      bash init/init.sh
-      break
-    elif [ "$chosen_num" = "2" ]; then
-      sh exe/main.sh
-      break
-    else
-      echo "Input 1 or 2 key"
+  if [ $activate_selected -eq 0 ]; then
+    echo "> Activate SYM"
+    echo "  Initialize Setting"
+  else
+    echo "  Activate SYM"
+    echo "> Initialize Setting"
   fi
+
+  echo "Enter w/s to move upward/downward"
+
+  read -r -n 1 input_key
+  if [ "$input_key" == "w" ] || [ "$input_key" == "W" ]; then
+    activate_selected=0
+  elif [ "$input_key" == "s" ] || [ "$input_key" == "S" ]; then
+    activate_selected=1
+  elif [ "$input_key" == "" ]; then
+    break
+  fi
+  clear
 done
+
+if [ $activate_selected -eq 0 ]; then
+  bash exe/main.sh
+else [ $activate_selected -eq 1 ]
+  bash init/init.sh
+fi

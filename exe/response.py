@@ -47,9 +47,11 @@ def reform_answer(answer):
     if "所" in answer:
         answer = answer.replace("所", "ところ")
     if "℃" in answer:
-        answer = answer.replace("℃ ", "℃")
+        answer = answer.replace("℃ ", "度")
     if "時00分" in answer:
         answer = answer.replace("時00分", "時")
+    if "時0分" in answer:
+        answer = answer.replace("時0分", "時")
     return answer
 
 
@@ -72,7 +74,8 @@ def exe(question):
         answer = answer.replace("℃", "℃ ")
     elif "詳しく" in question:
         answer = fetch_weather.main(
-            detail_required=os.path.isfile("tmp/already_asked.dat"), clothes_required=False
+            detail_required=os.path.isfile("tmp/already_asked.dat"),
+            clothes_required=False,
         )
         answer = answer.replace("℃", "℃ ")
     elif "服" in question:
@@ -99,7 +102,6 @@ def exe(question):
         if os.path.isfile("tmp/alarm_set.dat"):
             with open("tmp/alarm_set.dat") as f:
                 alarm_ringed = bool(int(f.read()))  # 0 or 1
-                print(alarm_ringed)
             answer = "おはようございます" if alarm_ringed else "アラームを解除しました"
             os.remove("tmp/alarm_set.dat")
         else:
