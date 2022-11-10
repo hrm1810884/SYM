@@ -117,11 +117,10 @@ def main():
     question = asrresult.read().rstrip()
     asrresult.close()
 
-    # 話者ID と認識結果を表示
+    # 話者 ID と認識結果を表示
     print(f"{question}")
 
     answer = exe(question)
-
     print("SYM:" + answer.replace("  ", "\n    "))
     os.system(mk_jtalk_command(reform_answer(answer)))
 
