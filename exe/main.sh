@@ -20,14 +20,6 @@ do
     exit;
   fi
 
-  # 話者認識
-  sidfile=${tmpdirname}/spkid.txt
-  bash lib/sid/identify_speaker.sh $filename $sidfile;
-
-  # 現在の話者番号を格納
-  # もし前の状態を保存しておきたければ別変数/別ファイルを用意する
-  sidnum=$(cat $sidfile)
-
   # 音声認識
   asrresult=${tmpdirname}/asrresult.txt
   echo $filename > ${tmpdirname}/list.txt
@@ -41,10 +33,10 @@ do
   # 状態/履歴への依存性を持たせたければこのプログラムを適宜修正（引数変更等）
   # 初期では話者ID を元に異なる応答リストを読み込む仕様
 
-  python3 exe/response.py dialogue/dialogue${sidnum}.conf $sidnum $asrresult 
+  python3 exe/response.py $asrresult 
   
   # 事後処理
-  rm $filename $sidfile $asrresult
+  rm $asrresult
 done
 
 # ここは実行されないはず
